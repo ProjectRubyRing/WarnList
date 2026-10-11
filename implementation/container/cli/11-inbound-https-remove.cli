@@ -1,0 +1,44 @@
+# =====================================================================
+# 11-inbound-https-remove.cli   (INBOUND_HTTPS_MODE=remove のときだけ適用。既定)
+#   ① WFLYELY00023 (KeyStore file '.../application.keystore' does not exist. Used blank.) 対処
+#
+# 原因: EAP 標準 standalone.xml のインバウンド HTTPS (8443) 用リソース
+#         key-store=applicationKS      (application.keystore / JKS / パスワード password)
+#         key-manager=applicationKM    (generate-self-signed-certificate-host=localhost)
+#         server-ssl-context=applicationSSC
+#         undertow https-listener=https (ssl-context=applicationSSC)
+#       の applicationKS が、配布物に含まれない application.keystore を指している。
+#       Elytron の key-store サービスは Mode.ACTIVE で、参照の有無に関係なくブート時に起動し、
+#       ファイルが無ければ required=false (既定) のため WARN を出して空のストアで続行する。
+#
+# 本構成は ALB で TLS を終端し、コンテナは 8080 (HTTP) だけで受ける = 8443 は使っていない。
+# 使っていないインバウンド HTTPS 一式を、参照する側から順に削除する:
+#   https-listener → applicationSSC → applicationKM → applicationKS
+# (逆順だと「参照されているリソースは削除できない」エラーになる)
+#
+# 効果: 警告が原因ごと消える / 未使用の 8443 が待ち受けなくなる (攻撃面の縮小) /
+#       イメージに既知パスワードの秘密鍵を同梱しなくてよい
+# 将来 ALB → タスク間も TLS にする場合は 12-inbound-https-dedicated.cli を使う。
+# =====================================================================
+
+# 1) https-listener (applicationSSC を参照している)
+if (outcome == success) of /subsystem=undertow/server=default-server/https-listener=https:read-resource
+    /subsystem=undertow/server=default-server/https-listener=https:remove
+end-if
+
+# 2) server-ssl-context
+if (outcome == success) of /subsystem=elytron/server-ssl-context=applicationSSC:read-resource
+    /subsystem=elytron/server-ssl-context=applicationSSC:remove
+end-if
+
+# 3) key-manager
+if (outcome == success) of /subsystem=elytron/key-manager=applicationKM:read-resource
+    /subsystem=elytron/key-manager=applicationKM:remove
+end-if
+
+# 4) key-store (これが WFLYELY00023 を出していた本体)
+if (outcome == success) of /subsystem=elytron/key-store=applicationKS:read-resource
+    /subsystem=elytron/key-store=applicationKS:remove
+end-if
+
+# ※ socket-binding=https (8443) は誰も使わなくなるが、残しても待ち受けは発生しない。

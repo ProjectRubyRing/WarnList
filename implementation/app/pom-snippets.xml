@@ -1,0 +1,99 @@
+<!--
+  iwinmichl.war の pom.xml に入れる断片 (⑤⑥⑦ の WAR 側の是正)
+
+  方針: EAP 8.1 (Jakarta EE 10) がサーバ側で提供する API は WAR に入れない (scope=provided)。
+        Java EE 時代 (javax.*) の jar は入れない。ビルド時に enforcer で混入を止める。
+-->
+<project>
+
+  <!-- (A) EAP 8.1 の BOM で、サーバが提供する API の版をそろえる (Red Hat Maven リポジトリ) -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.bom</groupId>
+        <artifactId>jboss-eap-ee</artifactId>
+        <!-- 版は Red Hat Maven リポジトリ (https://maven.repository.redhat.com/ga/) で、
+             利用中の EAP 8.1 アップデートに対応する jboss-eap-ee の版を確認して指定する -->
+        <version>${version.jboss.eap.bom}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- (B) サーバ提供 API は provided。WEB-INF/lib に入れない -->
+    <dependency>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>10.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- ⑤ jakarta.transaction-api などが推移的依存で WAR に入っている場合は provided に上書きする
+         (TransactionScoped に @NormalScope が付いており、WildFly が「CDI アノテーションあり」と判定する) -->
+    <dependency>
+      <groupId>jakarta.transaction</groupId>
+      <artifactId>jakarta.transaction-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- ⑦ JSTL は EAP 8.1 が Jakarta Standard Tag Library 3.0 を提供する。API だけ provided で参照する
+         (javax.servlet:jstl:1.2 / taglibs-standard-* は削除する) -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- ⑥ EAP の logging サブシステムに出す場合: log4j-api は provided、log4j-core は入れない -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- (C) javax.* (Java EE) の jar と、サーバ提供 API の同梱をビルドで止める -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <id>ban-javaee-and-provided-apis</id>
+            <goals><goal>enforce</goal></goals>
+            <configuration>
+              <rules>
+                <bannedDependencies>
+                  <excludes>
+                    <exclude>javax.servlet:*</exclude>
+                    <exclude>javax.servlet.jsp:*</exclude>
+                    <exclude>javax.servlet.jsp.jstl:*</exclude>
+                    <exclude>org.apache.taglibs:taglibs-standard-*</exclude>
+                    <exclude>javax.transaction:*</exclude>
+                    <exclude>javax.inject:*</exclude>
+                    <exclude>org.apache.logging.log4j:log4j-core</exclude>
+                  </excludes>
+                </bannedDependencies>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- (D) ② テスト用クラスを WAR に入れない (src/test/** は元々 WAR に入らない)。
+               どうしても WEB-INF/classes/testClasses を作っている場合は除外する -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.4.0</version>
+        <configuration>
+          <packagingExcludes>WEB-INF/classes/testClasses/**</packagingExcludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

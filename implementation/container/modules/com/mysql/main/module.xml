@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  MySQL Connector/J の JBoss モジュール定義 (⑩⑪⑬ のデータソースが使う JDBC ドライバ)。
+  置き場所: ${JBOSS_HOME}/modules/com/mysql/main/  (system/layers/base ではなく、ユーザー用の modules 直下)
+  jar は Dockerfile が mysql-connector-j.jar という名前でここへコピーする。
+
+  ※ ドライバを standalone/deployments へ「デプロイ」する方式は使わない。
+    ドライバを再デプロイ / アンデプロイすると、それに依存するデータソースが停止し、
+    使用中の接続が破棄される (⑬ IJ000615 の原因になり得る)。
+-->
+<module xmlns="urn:jboss:module:1.9" name="com.mysql">
+    <resources>
+        <resource-root path="mysql-connector-j.jar"/>
+    </resources>
+    <dependencies>
+        <!-- java.sql / java.naming / java.transaction.xa / java.management / java.security.jgss 等の JDK モジュール一式 -->
+        <module name="java.se"/>
+    </dependencies>
+</module>

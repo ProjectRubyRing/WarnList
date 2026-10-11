@@ -1,0 +1,393 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 6.12kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 DONE 0.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#3 CACHED
+
+#4 [internal] load metadata for registry.access.redhat.com/ubi9/ubi:9.8
+#4 DONE 0.0s
+
+#5 [context dist] load .dockerignore
+#5 DONE 0.0s
+
+#6 [internal] load metadata for registry.access.redhat.com/ubi9/openjdk-21-runtime:latest
+#6 DONE 0.0s
+
+#5 [context dist] load .dockerignore
+#5 transferring dist: 2B done
+#5 DONE 0.0s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [eap-build  1/11] FROM registry.access.redhat.com/ubi9/ubi:9.8
+#8 DONE 0.0s
+
+#9 [runtime 1/7] FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:latest
+#9 DONE 0.0s
+
+#10 [context dist] load from client
+#10 transferring dist: 56B done
+#10 DONE 0.0s
+
+#11 [context dist] load from client
+#11 transferring dist: 52B done
+#11 DONE 0.0s
+
+#12 [internal] load build context
+#12 transferring context: 876B done
+#12 DONE 0.0s
+
+#13 [eap-build  4/11] RUN set -eu; mkdir -p /tmp/eap-x;     if unzip -tq /tmp/eap-dist >/dev/null 2>&1; then unzip -q /tmp/eap-dist -d /tmp/eap-x;     else tar -xzf /tmp/eap-dist -C /tmp/eap-x; fi;     top="$(find /tmp/eap-x -mindepth 1 -maxdepth 1 -type d | head -n1)";     mv "${top}" "/opt/jboss-eap"; rm -rf /tmp/eap-x /tmp/eap-dist;     "/opt/jboss-eap/bin/standalone.sh" --version | tail -n1
+#13 CACHED
+
+#14 [eap-build  5/11] COPY modules/ /opt/jboss-eap/modules/
+#14 CACHED
+
+#15 [eap-build  3/11] COPY --from=dist wildfly-dist-35.0.1.Final.tar.gz /tmp/eap-dist
+#15 CACHED
+
+#16 [eap-build  2/11] RUN dnf -y --setopt=install_weak_deps=0 install java-21-openjdk-headless unzip tar gzip  && dnf clean all && rm -rf /var/cache/dnf
+#16 CACHED
+
+#17 [eap-build  6/11] COPY --from=dist mysql-connector-j-26.7.0.jar /opt/jboss-eap/modules/com/mysql/main/mysql-connector-j.jar
+#17 CACHED
+
+#18 [eap-build  7/11] COPY scripts/ /opt/app/scripts/
+#18 CACHED
+
+#19 [eap-build  8/11] COPY cli/ /opt/app/cli/
+#19 DONE 0.0s
+
+#20 [eap-build  9/11] RUN chmod 0755 /opt/app/scripts/*.sh
+#20 DONE 0.3s
+
+#21 [eap-build 10/11] RUN --mount=type=secret,id=cacerts,target=/run/secrets/cacerts.tar,required=true     set -eu; mkdir -p /opt/app/security;     if [ "system" = "elytron" ]; then         /opt/app/scripts/build-truststore.sh /run/secrets/cacerts.tar             /opt/app/security/extraslb-truststore.p12 changeit;         chmod 0444 /opt/app/security/extraslb-truststore.p12;     fi
+#21 DONE 0.4s
+
+#22 [eap-build 11/11] RUN /opt/app/scripts/apply-cli.sh /opt/app/cli
+#22 0.488 [apply-cli] TRUST_MODE=system INBOUND_HTTPS_MODE=dedicated SERVER_CONFIG=standalone.xml
+#22 3.029 [0m05:45:23,811 INFO  [org.jboss.modules] (CLI command executor) JBoss Modules version 2.1.6.Final
+#22 3.029 [0m[0m05:45:24,095 INFO  [org.jboss.msc] (CLI command executor) JBoss MSC version 1.5.5.Final
+#22 3.279 [0m[0m05:45:24,112 INFO  [org.jboss.threads] (CLI command executor) JBoss Threads version 2.4.0.Final
+#22 3.295 [0m[0m05:45:24,469 INFO  [org.jboss.as] (MSC service thread 1-3) WFLYSRV0049: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) starting
+#22 3.655 [0m[0m05:45:26,773 INFO  [org.wildfly.security] (Controller Boot Thread) ELY00001: WildFly Elytron version 2.6.0.Final
+#22 5.958 [0m[33m05:45:28,520 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-4) WFLYELY00023: KeyStore file '/opt/jboss-eap/standalone/configuration/application.keystore' does not exist. Used blank.
+#22 7.704 [0m[33m05:45:28,527 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-8) WFLYELY01084: KeyStore /opt/jboss-eap/standalone/configuration/application.keystore not found, it will be auto-generated on first use with a self-signed certificate for host localhost
+#22 7.711 [0m[0m05:45:28,809 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0212: Resuming server
+#22 7.993 [0m[0m05:45:28,831 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 4971ms - Started 50 of 73 services (24 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+#22 8.015 [0m===== [apply] 00-system-properties.cli
+#22 8.255 {"outcome" => "success"}
+#22 8.258 ===== [apply] 12-inbound-https-dedicated.cli
+#22 8.392 {
+#22 8.392     "outcome" => "success",
+#22 8.392     "response-headers" => {
+#22 8.392         "operation-requires-reload" => true,
+#22 8.392         "process-state" => "reload-required"
+#22 8.392     }
+#22 8.392 }
+#22 8.414 {
+#22 8.414     "outcome" => "success",
+#22 8.414     "response-headers" => {
+#22 8.414         "operation-requires-reload" => true,
+#22 8.414         "process-state" => "reload-required"
+#22 8.414     }
+#22 8.414 }
+#22 8.441 {
+#22 8.441     "outcome" => "success",
+#22 8.441     "response-headers" => {
+#22 8.441         "operation-requires-reload" => true,
+#22 8.441         "process-state" => "reload-required"
+#22 8.441     }
+#22 8.441 }
+#22 8.463 {
+#22 8.463     "outcome" => "success",
+#22 8.463     "response-headers" => {
+#22 8.463         "operation-requires-reload" => true,
+#22 8.463         "process-state" => "reload-required"
+#22 8.463     }
+#22 8.463 }
+#22 8.536 {
+#22 8.536     "outcome" => "success",
+#22 8.536     "response-headers" => {
+#22 8.536         "operation-requires-reload" => true,
+#22 8.536         "process-state" => "reload-required"
+#22 8.536     }
+#22 8.536 }
+#22 8.606 {
+#22 8.606     "outcome" => "success",
+#22 8.606     "response-headers" => {
+#22 8.606         "operation-requires-reload" => true,
+#22 8.606         "process-state" => "reload-required"
+#22 8.606     }
+#22 8.606 }
+#22 8.639 {
+#22 8.639     "outcome" => "success",
+#22 8.639     "response-headers" => {
+#22 8.639         "operation-requires-reload" => true,
+#22 8.639         "process-state" => "reload-required"
+#22 8.639     }
+#22 8.639 }
+#22 8.640 ===== [apply] 20-logging.cli
+#22 8.677 {
+#22 8.677     "outcome" => "success",
+#22 8.677     "response-headers" => {"process-state" => "reload-required"}
+#22 8.677 }
+#22 8.726 {
+#22 8.726     "outcome" => "success",
+#22 8.726     "response-headers" => {"process-state" => "reload-required"}
+#22 8.726 }
+#22 8.726 ===== [apply] 30-datasource-mysql-xa.cli
+#22 8.754 {
+#22 8.754     "outcome" => "success",
+#22 8.754     "response-headers" => {"process-state" => "reload-required"}
+#22 8.754 }
+#22 8.858 The batch executed successfully
+#22 8.860 process-state: reload-required 
+#22 8.861 ===== [apply] 31-jca-ccm.cli
+#22 8.886 {
+#22 8.886     "outcome" => "success",
+#22 8.886     "response-headers" => {"process-state" => "reload-required"}
+#22 8.886 }
+#22 8.913 {
+#22 8.913     "outcome" => "success",
+#22 8.913     "response-headers" => {"process-state" => "reload-required"}
+#22 8.913 }
+#22 8.913 ===== [apply] 60-undertow.cli
+#22 8.936 {
+#22 8.936     "outcome" => "success",
+#22 8.936     "response-headers" => {"process-state" => "reload-required"}
+#22 8.936 }
+#22 8.947 {
+#22 8.947     "outcome" => "success",
+#22 8.947     "response-headers" => {"process-state" => "reload-required"}
+#22 8.947 }
+#22 9.114 {
+#22 9.114     "outcome" => "success",
+#22 9.114     "response-headers" => {"process-state" => "reload-required"}
+#22 9.114 }
+#22 9.118 ===== [apply] 70-transactions.cli
+#22 9.170 {
+#22 9.170     "outcome" => "success",
+#22 9.170     "response-headers" => {"process-state" => "reload-required"}
+#22 9.170 }
+#22 9.175 ===== [verify] 0 system-property (⑬)
+#22 9.183 {
+#22 9.183     "outcome" => "success",
+#22 9.183     "result" => {"value" => expression "${env.EAP_SIGTERM_SUSPEND_TIMEOUT:30}"},
+#22 9.183     "response-headers" => {"process-state" => "reload-required"}
+#22 9.183 }
+#22 9.183 ===== [verify] 1 インバウンド HTTPS (①): remove モードなら https-listener と applicationKS は "failed" (= 無い) が正しい
+#22 9.190 {
+#22 9.190     "outcome" => "success",
+#22 9.190     "result" => ["https"],
+#22 9.190     "response-headers" => {"process-state" => "reload-required"}
+#22 9.190 }
+#22 9.193 {
+#22 9.193     "outcome" => "success",
+#22 9.193     "result" => ["applicationKS"],
+#22 9.193     "response-headers" => {"process-state" => "reload-required"}
+#22 9.193 }
+#22 9.194 ===== [verify] 1 既定 SSLContext (①: TRUST_MODE=elytron なら extraslb-client-ssl-context / system なら undefined)
+#22 9.197 {
+#22 9.197     "outcome" => "success",
+#22 9.197     "result" => undefined,
+#22 9.197     "response-headers" => {"process-state" => "reload-required"}
+#22 9.197 }
+#22 9.197 ===== [verify] 2 logging (④)
+#22 9.204 {
+#22 9.204     "outcome" => "success",
+#22 9.204     "result" => {
+#22 9.204         "category" => "org.jboss.as.ee",
+#22 9.204         "filter-spec" => "not(match(\"WFLYEE0007: Not installing optional component org.springframework.\"))",
+#22 9.204         "handlers" => undefined,
+#22 9.204         "level" => "ALL",
+#22 9.204         "use-parent-handlers" => true
+#22 9.204     },
+#22 9.204     "response-headers" => {"process-state" => "reload-required"}
+#22 9.204 }
+#22 9.204 ===== [verify] 3 datasource (⑧⑩⑪⑫)
+#22 9.231 {
+#22 9.231     "outcome" => "success",
+#22 9.231     "result" => {
+#22 9.231         "allocation-retry" => undefined,
+#22 9.231         "allocation-retry-wait-millis" => undefined,
+#22 9.231         "allow-multiple-users" => false,
+#22 9.231         "authentication-context" => undefined,
+#22 9.231         "background-validation" => false,
+#22 9.231         "background-validation-millis" => undefined,
+#22 9.231         "blocking-timeout-wait-millis" => expression "${env.DB_BLOCKING_TIMEOUT_MS:5000}",
+#22 9.231         "capacity-decrementer-class" => undefined,
+#22 9.231         "capacity-decrementer-properties" => undefined,
+#22 9.231         "capacity-incrementer-class" => undefined,
+#22 9.231         "capacity-incrementer-properties" => undefined,
+#22 9.231         "check-valid-connection-sql" => undefined,
+#22 9.231         "connectable" => false,
+#22 9.231         "connection-listener-class" => undefined,
+#22 9.231         "connection-listener-property" => undefined,
+#22 9.231         "credential-reference" => undefined,
+#22 9.231         "driver-name" => "mysql",
+#22 9.231         "elytron-enabled" => false,
+#22 9.231         "enabled" => true,
+#22 9.231         "enlistment-trace" => false,
+#22 9.231         "exception-sorter-class-name" => "org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter",
+#22 9.231         "exception-sorter-module" => undefined,
+#22 9.231         "exception-sorter-properties" => undefined,
+#22 9.231         "flush-strategy" => undefined,
+#22 9.231         "idle-timeout-minutes" => expression "${env.DB_IDLE_TIMEOUT_MIN:5}",
+#22 9.231         "initial-pool-size" => undefined,
+#22 9.231         "interleaving" => false,
+#22 9.231         "jndi-name" => "java:/jdbc/MIF02JA_JDS",
+#22 9.231         "max-pool-size" => expression "${env.DB_MAX_POOL_SIZE:20}",
+#22 9.231         "mcp" => "org.jboss.jca.core.connectionmanager.pool.mcp.SemaphoreConcurrentLinkedDequeManagedConnectionPool",
+#22 9.231         "min-pool-size" => expression "${env.DB_MIN_POOL_SIZE:0}",
+#22 9.231         "new-connection-sql" => undefined,
+#22 9.231         "no-recovery" => undefined,
+#22 9.231         "no-tx-separate-pool" => false,
+#22 9.231         "pad-xid" => false,
+#22 9.231         "password" => expression "${env.DB_PASSWORD}",
+#22 9.231         "pool-fair" => undefined,
+#22 9.231         "pool-prefill" => undefined,
+#22 9.231         "pool-use-strict-min" => undefined,
+#22 9.231         "prepared-statements-cache-size" => undefined,
+#22 9.231         "query-timeout" => undefined,
+#22 9.231         "reauth-plugin-class-name" => undefined,
+#22 9.231         "reauth-plugin-properties" => undefined,
+#22 9.231         "recovery-authentication-context" => undefined,
+#22 9.231         "recovery-credential-reference" => undefined,
+#22 9.231         "recovery-elytron-enabled" => false,
+#22 9.231         "recovery-password" => undefined,
+#22 9.231         "recovery-plugin-class-name" => undefined,
+#22 9.231         "recovery-plugin-properties" => undefined,
+#22 9.231         "recovery-security-domain" => undefined,
+#22 9.231         "recovery-username" => undefined,
+#22 9.231         "same-rm-override" => undefined,
+#22 9.231         "security-domain" => undefined,
+#22 9.231         "set-tx-query-timeout" => false,
+#22 9.231         "share-prepared-statements" => false,
+#22 9.231         "spy" => false,
+#22 9.231         "stale-connection-checker-class-name" => undefined,
+#22 9.231         "stale-connection-checker-module" => undefined,
+#22 9.231         "stale-connection-checker-properties" => undefined,
+#22 9.231         "statistics-enabled" => true,
+#22 9.231         "track-statements" => expression "${env.DB_TRACK_STATEMENTS:NOWARN}",
+#22 9.231         "tracking" => false,
+#22 9.231         "transaction-isolation" => undefined,
+#22 9.231         "url-delimiter" => undefined,
+#22 9.231         "url-property" => undefined,
+#22 9.231         "url-selector-strategy-class-name" => undefined,
+#22 9.231         "use-ccm" => true,
+#22 9.231         "use-fast-fail" => false,
+#22 9.231         "use-java-context" => true,
+#22 9.231         "use-try-lock" => undefined,
+#22 9.231         "user-name" => expression "${env.DB_USER}",
+#22 9.231         "valid-connection-checker-class-name" => "org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker",
+#22 9.231         "valid-connection-checker-module" => undefined,
+#22 9.231         "valid-connection-checker-properties" => undefined,
+#22 9.231         "validate-on-match" => true,
+#22 9.231         "wrap-xa-resource" => true,
+#22 9.231         "xa-datasource-class" => undefined,
+#22 9.231         "xa-resource-timeout" => undefined,
+#22 9.231         "xa-datasource-properties" => {
+#22 9.231             "ServerName" => {"value" => expression "${env.DB_HOST}"},
+#22 9.231             "PortNumber" => {"value" => expression "${env.DB_PORT:3306}"},
+#22 9.231             "DatabaseName" => {"value" => expression "${env.DB_NAME}"},
+#22 9.231             "TcpKeepAlive" => {"value" => "true"},
+#22 9.231             "ConnectTimeout" => {"value" => expression "${env.DB_CONNECT_TIMEOUT_MS:10000}"},
+#22 9.231             "SocketTimeout" => {"value" => expression "${env.DB_SOCKET_TIMEOUT_MS:120000}"}
+#22 9.231         }
+#22 9.231     },
+#22 9.231     "response-headers" => {"process-state" => "reload-required"}
+#22 9.231 }
+#22 9.233 ===== [verify] 4 undertow (⑨)
+#22 9.236 {
+#22 9.236     "outcome" => "success",
+#22 9.236     "result" => true,
+#22 9.236     "response-headers" => {"process-state" => "reload-required"}
+#22 9.236 }
+#22 9.240 {
+#22 9.240     "outcome" => "success",
+#22 9.240     "result" => {
+#22 9.240         "attributes" => {
+#22 9.240             "date-time" => {
+#22 9.240                 "key" => "timestamp",
+#22 9.240                 "date-format" => "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+#22 9.240             },
+#22 9.240             "remote-ip" => {"key" => "client"},
+#22 9.240             "request-method" => {"key" => "method"},
+#22 9.240             "request-url" => {"key" => "path"},
+#22 9.240             "query-string" => {"key" => "query"},
+#22 9.240             "response-code" => {"key" => "status"},
+#22 9.240             "response-time" => {
+#22 9.240                 "key" => "ms",
+#22 9.240                 "time-unit" => "MILLISECONDS"
+#22 9.240             },
+#22 9.240             "request-header" => {
+#22 9.240                 "key-prefix" => "h_",
+#22 9.240                 "names" => [
+#22 9.240                     "X-Forwarded-For",
+#22 9.240                     "User-Agent",
+#22 9.240                     "Referer"
+#22 9.240                 ]
+#22 9.240             }
+#22 9.240         },
+#22 9.240         "include-host-name" => false,
+#22 9.240         "metadata" => undefined,
+#22 9.240         "predicate" => "regex(pattern=\"^[45]\", value=\"%s\", full-match=false)",
+#22 9.240         "worker" => "default"
+#22 9.240     },
+#22 9.240     "response-headers" => {"process-state" => "reload-required"}
+#22 9.240 }
+#22 9.241 ===== [verify] 5 transactions / jca
+#22 9.246 {
+#22 9.246     "outcome" => "success",
+#22 9.246     "result" => expression "${env.TX_NODE_ID:${jboss.tx.node.id:1}}",
+#22 9.246     "response-headers" => {"process-state" => "reload-required"}
+#22 9.246 }
+#22 9.250 {
+#22 9.250     "outcome" => "success",
+#22 9.250     "result" => {
+#22 9.250         "debug" => expression "${env.JCA_CCM_DEBUG:false}",
+#22 9.250         "error" => expression "${env.JCA_CCM_ERROR:false}",
+#22 9.250         "ignore-unknown-connections" => false,
+#22 9.250         "install" => true
+#22 9.250     },
+#22 9.250     "response-headers" => {"process-state" => "reload-required"}
+#22 9.250 }
+#22 9.287 [0m05:45:30,103 INFO  [org.jboss.as] (MSC service thread 1-6) WFLYSRV0050: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) stopped in 21ms
+#22 9.287 [0m[apply-cli] done
+#22 DONE 9.5s
+
+#23 [runtime 2/7] COPY --from=eap-build /opt/app/scripts/ /opt/app/scripts/
+#23 CACHED
+
+#24 [runtime 3/7] RUN --mount=type=secret,id=cacerts,target=/run/secrets/cacerts.tar,required=true     set -eu;     if [ "system" = "system" ]; then /opt/app/scripts/install-ca-anchors.sh /run/secrets/cacerts.tar; fi
+#24 CACHED
+
+#25 [runtime 4/7] COPY --from=eap-build --chown=185:0 /opt/jboss-eap /opt/jboss-eap
+#25 DONE 2.9s
+
+#26 [runtime 5/7] COPY --from=eap-build --chown=185:0 /opt/app /opt/app
+#26 DONE 0.0s
+
+#27 [runtime 6/7] RUN chmod -R g=u /opt/jboss-eap/standalone /opt/app
+#27 DONE 1.0s
+
+#28 [runtime 7/7] WORKDIR /opt/jboss-eap
+#28 DONE 0.1s
+
+#29 exporting to image
+#29 exporting layers
+#29 exporting layers 1.3s done
+#29 writing image sha256:1609caf71a1a573977697bcd0ccc533c65b6368ae8d21ef9c48313185db5bdf7 done
+#29 naming to docker.io/library/wl-after-system-dedicated:1 0.0s done
+#29 DONE 1.3s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/ln9lx142htlrnq7k7rbo4cu0l

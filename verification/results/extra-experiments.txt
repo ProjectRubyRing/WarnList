@@ -1,0 +1,28 @@
+########## E8 ④ の原因を DEBUG で確認 (org.jboss.as.ee を DEBUG、CONSOLE ハンドラも DEBUG にして再デプロイ)
+Not installing optional component javax.servlet.jsp.jstl.tlv.PermittedTaglibsTLV due to an exception: java.lang.NoClassDefFoundError: Failed to link javax/servlet/jsp/jstl/tlv/PermittedTaglibsTLV (Module "deployment.iwinmichl.war" from Service Module Loader): javax/servlet/jsp/tagext/TagLibraryValidator
+Not installing optional component javax.servlet.jsp.jstl.tlv.ScriptFreeTLV due to an exception: java.lang.NoClassDefFoundError: Failed to link javax/servlet/jsp/jstl/tlv/ScriptFreeTLV (Module "deployment.iwinmichl.war" from Service Module Loader): javax/servlet/jsp/tagext/TagLibraryValidator
+Not installing optional component org.springframework.http.server.ServletServerHttpAsyncRequestControl due to an exception: org.jboss.as.server.deployment.DeploymentUnitProcessingException: WFLYEE0048: Could not find default constructor for class org.springframework.http.server.ServletServerHttpAsyncRequestControl
+Not installing optional component org.springframework.http.server.reactive.ServletHttpHandlerAdapter$HttpHandlerAsyncListener due to an exception: org.jboss.as.server.deployment.DeploymentUnitProcessingException: WFLYEE0048: Could not find default constructor for class org.springframework.http.server.reactive.ServletHttpHandlerA
+Not installing optional component org.springframework.http.server.reactive.ServletServerHttpRequest$RequestAsyncListener due to an exception: org.jboss.as.server.deployment.DeploymentUnitProcessingException: WFLYEE0048: Could not find default constructor for class org.springframework.http.server.reactive.ServletServerHttpRequest
+Not installing optional component org.springframework.http.server.reactive.ServletServerHttpResponse$ResponseAsyncListener due to an exception: org.jboss.as.server.deployment.DeploymentUnitProcessingException: WFLYEE0048: Could not find default constructor for class org.springframework.http.server.reactive.ServletServerHttpRespo
+Not installing optional component org.springframework.web.context.request.async.StandardServletAsyncWebRequest due to an exception: org.jboss.as.server.deployment.DeploymentUnitProcessingException: WFLYEE0048: Could not find default constructor for class org.springframework.web.context.request.async.StandardServletAsyncWebReques
+Not installing optional component org.springframework.web.filter.ServerHttpObservationFilter$ObservationAsyncListener due to an exception: org.jboss.as.server.deployment.DeploymentUnitProcessingException: WFLYEE0048: Could not find default constructor for class org.springframework.web.filter.ServerHttpObservationFilter$Observati
+
+########## E9 ⑥ Log4j 2 を同梱した WAR + 除外指定 = none
+(jboss-deployment-structure.xml なし)
+LoggerContext=org.jboss.logmanager.log4j.JBossLoggerContext
+log4j-api loaded from=(jar:file:/opt/jboss-eap/modules/system/layers/base/org/apache/logging/log4j/api/main/log4j-api-2.23.1.jar!/ <no signer certificates>)
+05:47:36,626 INFO  [com.example.l4j.L4jServlet] (default task-1) hello-from-app-log4j2
+
+########## E9 ⑥ Log4j 2 を同梱した WAR + 除外指定 = bad
+(<exclusions><module name="org.jboss.logmanager.log4j2"/>)
+LoggerContext=org.jboss.logmanager.log4j.JBossLoggerContext
+log4j-api loaded from=(jar:file:/opt/jboss-eap/modules/system/layers/base/org/apache/logging/log4j/api/main/log4j-api-2.23.1.jar!/ <no signer certificates>)
+05:47:42,661 WARN  [org.jboss.as.server.deployment] (MSC service thread 1-2) WFLYSRV0274: Excluded dependency org.jboss.logmanager.log4j2 via jboss-deployment-structure.xml does not exist.
+05:47:45,887 INFO  [com.example.l4j.L4jServlet] (default task-1) hello-from-app-log4j2
+
+########## E9 ⑥ Log4j 2 を同梱した WAR + 除外指定 = good
+(<exclusions><module name="org.apache.logging.log4j.api"/>)
+LoggerContext=org.apache.logging.log4j.core.LoggerContext
+log4j-api loaded from=(vfs:/content/l4j.war/WEB-INF/lib/log4j-api-2.26.1.jar <no signer certificates>)
+05:47:55,327 INFO  [stdout] (default task-1) APPLOG4J|INFO|com.example.l4j.L4jServlet|hello-from-app-log4j2

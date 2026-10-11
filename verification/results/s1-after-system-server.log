@@ -1,0 +1,200 @@
+==> [entrypoint] TX_NODE_ID=ebafcc4aa8d9
+==> [entrypoint] TRUST_MODE=system INBOUND_HTTPS_MODE=remove EAP_SIGTERM_SUSPEND_TIMEOUT=30
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss-eap
+
+  JAVA: /usr/lib/jvm/jre/bin/java
+
+  JAVA_OPTS:  -Djdk.serialFilter="maxbytes=10485760;maxdepth=128;maxarray=100000;maxrefs=300000" -Xms64m -Xmx512m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true  --add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED --add-exports=jdk.naming.dns/com.sun.jndi.dns=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED -Djava.security.manager=allow
+
+=========================================================================
+
+05:48:11,716 INFO  [org.jboss.modules] (main) JBoss Modules version 2.1.6.Final
+05:48:12,125 INFO  [org.jboss.msc] (main) JBoss MSC version 1.5.5.Final
+05:48:12,132 INFO  [org.jboss.threads] (main) JBoss Threads version 2.4.0.Final
+05:48:12,204 INFO  [org.jboss.as] (MSC service thread 1-1) WFLYSRV0049: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) starting
+05:48:12,253 INFO  [org.jboss.vfs] (MSC service thread 1-2) VFS000002: Failed to clean existing content for temp file provider of type temp. Enable DEBUG level log to find what caused this
+05:48:12,800 INFO  [org.wildfly.security] (Controller Boot Thread) ELY00001: WildFly Elytron version 2.6.0.Final
+05:48:13,265 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 6) WFLYDR0001: Content added at location /opt/jboss-eap/standalone/data/content/dd/4cbc80601e60e41436c330a65cb45211c561da/content
+05:48:13,579 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 6) WFLYDR0001: Content added at location /opt/jboss-eap/standalone/data/content/74/ec8e17d3cdf0e6c57ed634f586deb349927b3f/content
+05:48:13,599 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0039: Creating http management service using socket-binding (management-http)
+05:48:13,611 INFO  [org.xnio] (MSC service thread 1-8) XNIO version 3.8.16.Final
+05:48:13,618 INFO  [org.xnio.nio] (MSC service thread 1-8) XNIO NIO Implementation Version 3.8.16.Final
+05:48:13,662 INFO  [org.jboss.remoting] (MSC service thread 1-7) JBoss Remoting version 5.0.30.Final
+05:48:13,682 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-8) WFLYSRV0027: Starting deployment of "iwinmichl.war" (runtime-name: "iwinmichl.war")
+05:48:13,682 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-4) WFLYSRV0027: Starting deployment of "ws-backend.war" (runtime-name: "ws-backend.war")
+05:48:13,683 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 44) WFLYJCA0004: Deploying JDBC-compliant driver class org.h2.Driver (version 2.2)
+05:48:13,707 INFO  [org.wildfly.extension.elytron.oidc._private] (ServerService Thread Pool -- 53) WFLYOIDC0001: Activating WildFly Elytron OIDC Subsystem
+05:48:13,717 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 55) WFLYCLINF0001: Activating Infinispan subsystem.
+05:48:13,720 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 44) WFLYJCA0005: Deploying non-JDBC-compliant driver class com.mysql.cj.jdbc.Driver (version 26.7)
+05:48:13,720 INFO  [org.wildfly.extension.io] (ServerService Thread Pool -- 56) WFLYIO001: Worker 'default' has auto-configured to 8 IO threads with 64 max task threads based on your 4 available processors
+05:48:13,728 INFO  [org.wildfly.extension.health] (ServerService Thread Pool -- 54) WFLYHEALTH0001: Activating Base Health Subsystem
+05:48:13,745 INFO  [org.jboss.as.connector] (MSC service thread 1-7) WFLYJCA0009: Starting Jakarta Connectors Subsystem (WildFly/IronJacamar 3.0.10.Final)
+05:48:13,751 INFO  [org.jboss.as.jaxrs] (ServerService Thread Pool -- 57) WFLYRS0016: RESTEasy version 6.2.11.Final
+05:48:13,760 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-8) WFLYJCA0018: Started Driver service with driver-name = mysql
+05:48:13,761 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-7) WFLYJCA0018: Started Driver service with driver-name = h2
+05:48:13,787 INFO  [org.jboss.as.jsf] (ServerService Thread Pool -- 62) WFLYJSF0007: Activated the following Jakarta Server Faces Implementations: [main]
+05:48:13,791 INFO  [org.wildfly.extension.metrics] (ServerService Thread Pool -- 64) WFLYMETRICS0001: Activating Base Metrics Subsystem
+05:48:13,794 INFO  [org.wildfly.extension.microprofile.config.smallrye] (ServerService Thread Pool -- 65) WFLYCONF0001: Activating MicroProfile Config Subsystem
+05:48:13,797 INFO  [org.wildfly.extension.microprofile.jwt.smallrye] (ServerService Thread Pool -- 66) WFLYJWT0001: Activating MicroProfile JWT Subsystem
+05:48:13,810 INFO  [org.jboss.as.naming] (ServerService Thread Pool -- 67) WFLYNAM0001: Activating Naming Subsystem
+05:48:13,831 INFO  [org.jboss.as.ejb3] (MSC service thread 1-2) WFLYEJB0481: Strict pool slsb-strict-max-pool is using a max instance size of 16 (per class), which is derived from thread worker pool sizing.
+05:48:13,842 INFO  [org.jboss.as.ejb3] (MSC service thread 1-7) WFLYEJB0482: Strict pool mdb-strict-max-pool is using a max instance size of 16 (per class), which is derived from the number of CPUs on this host.
+05:48:13,853 INFO  [org.jboss.as.webservices] (ServerService Thread Pool -- 76) WFLYWS0002: Activating WebServices Extension
+05:48:13,862 INFO  [org.jboss.as.naming] (MSC service thread 1-7) WFLYNAM0003: Starting Naming Service
+05:48:13,865 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-4) WFLYMAIL0001: Bound mail session [java:jboss/mail/Default]
+05:48:13,921 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-7) WFLYUT0003: Undertow 2.3.18.Final starting
+05:48:14,013 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-8) WFLYUT0012: Started server default-server.
+05:48:14,014 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-1) Queuing requests.
+05:48:14,015 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-1) WFLYUT0018: Host default-host starting
+05:48:14,014 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 75) WFLYUT0014: Creating file handler for path '/opt/jboss-eap/welcome-content' with options [directory-listing: 'false', follow-symlink: 'false', case-sensitive: 'true', safe-symlink-paths: '[]']
+05:48:14,093 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-3) WFLYUT0006: Undertow HTTP listener default listening on 0.0.0.0:8080
+05:48:14,130 INFO  [org.jboss.as.ejb3] (MSC service thread 1-7) WFLYEJB0493: Jakarta Enterprise Beans subsystem suspension complete
+05:48:14,150 INFO  [org.jboss.as.server.deployment.scanner] (MSC service thread 1-8) WFLYDS0013: Started FileSystemDeploymentService for directory /opt/jboss-eap/standalone/deployments
+05:48:14,185 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-8) WFLYJCA0001: Bound data source [java:jboss/datasources/ExampleDS]
+05:48:14,188 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-2) WFLYJCA0001: Bound data source [java:/jdbc/MIF02JA_JDS]
+05:48:14,204 INFO  [org.jboss.ws.common.management] (MSC service thread 1-4) JBWS022052: Starting JBossWS 7.3.1.Final (Apache CXF 4.0.6) 
+05:48:15,074 INFO  [org.jboss.ws.cxf.metadata] (MSC service thread 1-5) JBWS024061: Adding service endpoint metadata: id=com.example.wsbackend.SlowService
+ address=http://172.18.0.4:8080/ws-backend/SlowService
+ implementor=com.example.wsbackend.SlowService
+ serviceName={http://wsbackend.example.com/}SlowService
+ portName={http://wsbackend.example.com/}SlowServicePort
+ annotationWsdlLocation=null
+ wsdlLocationOverride=null
+ mtomEnabled=false
+05:48:15,656 INFO  [org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean] (MSC service thread 1-5) Creating Service {http://wsbackend.example.com/}SlowService from class com.example.wsbackend.SlowService
+05:48:15,656 INFO  [io.undertow.servlet] (ServerService Thread Pool -- 80) 1 Spring WebApplicationInitializers detected on classpath
+05:48:15,737 INFO  [io.undertow.servlet] (ServerService Thread Pool -- 80) Initializing Spring DispatcherServlet 'dispatcher'
+05:48:15,738 INFO  [org.springframework.web.servlet.DispatcherServlet] (ServerService Thread Pool -- 80) Initializing Servlet 'dispatcher'
+05:48:16,020 INFO  [org.apache.cxf.endpoint.ServerImpl] (MSC service thread 1-5) Setting the server's publish address to be http://172.18.0.4:8080/ws-backend/SlowService
+05:48:16,123 INFO  [org.jboss.ws.cxf.deployment] (MSC service thread 1-5) JBWS024074: WSDL published to: file:/opt/jboss-eap/standalone/data/wsdl/ws-backend.war/SlowService.wsdl
+05:48:16,165 INFO  [org.jboss.as.webservices] (MSC service thread 1-7) WFLYWS0003: Starting service jboss.ws.endpoint."ws-backend.war"."com.example.wsbackend.SlowService"
+05:48:16,174 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 81) WFLYUT0021: Registered web context: '/ws-backend' for server 'default-server'
+05:48:16,288 INFO  [org.hibernate.validator.internal.util.Version] (ServerService Thread Pool -- 80) HV000001: Hibernate Validator 8.0.2.Final
+05:48:16,457 INFO  [org.springframework.web.servlet.DispatcherServlet] (ServerService Thread Pool -- 80) Completed initialization in 717 ms
+05:48:16,457 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 80) WFLYUT0021: Registered web context: '/iwinmichl' for server 'default-server'
+05:48:16,500 INFO  [org.jboss.as.server] (ServerService Thread Pool -- 45) WFLYSRV0010: Deployed "iwinmichl.war" (runtime-name : "iwinmichl.war")
+05:48:16,500 INFO  [org.jboss.as.server] (ServerService Thread Pool -- 45) WFLYSRV0010: Deployed "ws-backend.war" (runtime-name : "ws-backend.war")
+05:48:16,539 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0212: Resuming server
+05:48:16,543 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0060: Http management interface listening on http://127.0.0.1:9990/management
+05:48:16,543 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0051: Admin console listening on http://127.0.0.1:9990
+05:48:16,545 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5147ms - Started 597 of 804 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+05:48:22,141 WARN  [com.example.iwinmichl.web.MethodNotAllowedAdvice] (default task-1) HTTP 405 method=POST uri=/iwinmichl/api/hello query=- dispatcher=REQUEST errorOrigin=- remote=172.18.0.1 xff=- ua=curl/8.21.0 referer=- allowed=[GET]
+{"eventSource":"web-access","timestamp":"2026-10-11T05:48:22.152Z","query":"","client":"172.18.0.1","h_X-Forwarded-For":null,"h_User-Agent":"curl/8.21.0","h_Referer":null,"method":"POST","path":"/iwinmichl/api/hello","status":405,"ms":31}
+05:48:23,477 INFO  [org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean] (default task-1) Creating Service {http://wsbackend.example.com/}SlowService from class org.apache.cxf.jaxws.support.DummyImpl
+05:48:24,634 WARNING [org.apache.cxf.phase.PhaseInterceptorChain] (default task-1) Interceptor for {http://wsbackend.example.com/}SlowService#{http://cxf.apache.org/jaxws/dispatch}Invoke has thrown exception, unwinding now: org.apache.cxf.interceptor.Fault: Could not receive Message.
+	at org.apache.cxf@4.0.6//org.apache.cxf.interceptor.MessageSenderInterceptor$MessageSenderEndingInterceptor.handleMessage(MessageSenderInterceptor.java:65)
+	at org.apache.cxf@4.0.6//org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.doInvoke(ClientImpl.java:530)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invoke(ClientImpl.java:441)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invoke(ClientImpl.java:356)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invoke(ClientImpl.java:314)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invokeWrapped(ClientImpl.java:349)
+	at org.apache.cxf.impl//org.apache.cxf.jaxws.DispatchImpl.invoke(DispatchImpl.java:322)
+	at org.apache.cxf.impl//org.apache.cxf.jaxws.DispatchImpl.invoke(DispatchImpl.java:241)
+	at deployment.iwinmichl.war//com.example.iwinmichl.test.SoapClientServlet.doGet(SoapClientServlet.java:59)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:527)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.lambda$handleRequest$1(ElytronRunAsHandler.java:68)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.FlexibleIdentityAssociation.runAsFunctionEx(FlexibleIdentityAssociation.java:103)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAsFunctionEx(Scoped.java:161)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAs(Scoped.java:73)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.handleRequest(ElytronRunAsHandler.java:67)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.RedirectDirHandler.handleRequest(RedirectDirHandler.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:117)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at org.wildfly.security.elytron-web.undertow-server-servlet@4.1.0.Final//org.wildfly.elytron.web.undertow.server.servlet.CleanUpHandler.handleRequest(CleanUpHandler.java:38)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.security.jacc.JACCContextIdHandler.handleRequest(JACCContextIdHandler.java:44)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.GlobalRequestControllerHandler.handleRequest(GlobalRequestControllerHandler.java:51)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.SendErrorPageHandler.handleRequest(SendErrorPageHandler.java:52)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:276)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:132)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:256)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:101)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.Connectors.executeRootHandler(Connectors.java:395)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:861)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at org.jboss.xnio@3.8.16.Final//org.xnio.XnioWorker$WorkerThreadFactory$1$1.run(XnioWorker.java:1282)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.net.SocketTimeoutException: SocketTimeoutException invoking http://localhost:8080/ws-backend/SlowService: Read timed out
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.mapException(HTTPConduit.java:1452)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.close(HTTPConduit.java:1433)
+	at org.apache.cxf@4.0.6//org.apache.cxf.transport.AbstractConduit.close(AbstractConduit.java:56)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit.close(HTTPConduit.java:717)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HttpClientHTTPConduit.close(HttpClientHTTPConduit.java:261)
+	at org.apache.cxf@4.0.6//org.apache.cxf.interceptor.MessageSenderInterceptor$MessageSenderEndingInterceptor.handleMessage(MessageSenderInterceptor.java:63)
+	... 53 more
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:278)
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:304)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:346)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:796)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1099)
+	at java.base/java.io.BufferedInputStream.fill(BufferedInputStream.java:291)
+	at java.base/java.io.BufferedInputStream.read1(BufferedInputStream.java:347)
+	at java.base/java.io.BufferedInputStream.implRead(BufferedInputStream.java:420)
+	at java.base/java.io.BufferedInputStream.read(BufferedInputStream.java:399)
+	at java.base/sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:835)
+	at java.base/sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:767)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1730)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1632)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:531)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.URLConnectionHTTPConduit$URLConnectionWrappedOutputStream$2.run(URLConnectionHTTPConduit.java:370)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.URLConnectionHTTPConduit$URLConnectionWrappedOutputStream$2.run(URLConnectionHTTPConduit.java:366)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.URLConnectionHTTPConduit$URLConnectionWrappedOutputStream.getResponseCode(URLConnectionHTTPConduit.java:366)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.doProcessResponseCode(HTTPConduit.java:1653)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.handleResponseInternal(HTTPConduit.java:1684)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.handleResponse(HTTPConduit.java:1626)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.close(HTTPConduit.java:1420)
+	... 57 more
+
+05:48:24,691 INFO  [org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean] (default task-1) Creating Service {http://wsbackend.example.com/}SlowService from class org.apache.cxf.jaxws.support.DummyImpl
+05:51:18,654 INFO  [org.jboss.as.server] (Thread-1) WFLYSRV0211: Suspending server with 30000 ms timeout.
+*** JBossAS process (137) received TERM signal ***
+05:51:18,657 INFO  [org.jboss.as.ejb3] (Thread-1) WFLYEJB0493: Jakarta Enterprise Beans subsystem suspension complete
+05:51:30,422 INFO  [org.jboss.as.server] (Thread-1) WFLYSRV0220: Server shutdown has been requested via an OS signal
+05:51:30,427 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 89) WFLYUT0022: Unregistered web context: '/iwinmichl' from server 'default-server'
+05:51:30,433 INFO  [io.undertow.servlet] (ServerService Thread Pool -- 89) Destroying Spring FrameworkServlet 'dispatcher'
+05:51:30,435 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-5) WFLYMAIL0002: Unbound mail session [java:jboss/mail/Default]
+05:51:30,437 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 91) WFLYUT0022: Unregistered web context: '/ws-backend' from server 'default-server'
+05:51:30,441 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-3) WFLYUT0019: Host default-host stopping
+05:51:30,443 INFO  [org.jboss.as.webservices] (MSC service thread 1-3) WFLYWS0004: Stopping service jboss.ws.endpoint."ws-backend.war"."com.example.wsbackend.SlowService"
+05:51:30,450 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-3) WFLYJCA0010: Unbound data source [java:jboss/datasources/ExampleDS]
+05:51:30,450 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-4) WFLYJCA0010: Unbound data source [java:/jdbc/MIF02JA_JDS]
+05:51:30,455 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-5) WFLYJCA0019: Stopped Driver service with driver-name = h2
+05:51:30,458 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-4) WFLYJCA0019: Stopped Driver service with driver-name = mysql
+05:51:30,463 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-6) WFLYSRV0028: Stopped deployment iwinmichl.war (runtime-name: iwinmichl.war) in 34ms
+05:51:30,475 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0008: Undertow HTTP listener default suspending
+05:51:30,475 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-6) WFLYSRV0028: Stopped deployment ws-backend.war (runtime-name: ws-backend.war) in 46ms
+05:51:30,476 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0007: Undertow HTTP listener default stopped, was bound to 0.0.0.0:8080
+05:51:30,477 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-2) WFLYUT0004: Undertow 2.3.18.Final stopping
+05:51:30,483 INFO  [org.jboss.as] (MSC service thread 1-8) WFLYSRV0050: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) stopped in 55ms
+*** JBossAS process (137) received TERM signal ***

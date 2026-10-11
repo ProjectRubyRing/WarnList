@@ -1,0 +1,71 @@
+# =====================================================================
+# 30-datasource-mysql-xa.cli
+#   ⑧ IJ030040 / ⑫ IJ030042 (閉じ忘れ検出) と ⑩ IJ030027 / ⑪ IJ000621 (死んだ接続の破棄) の対処
+#
+# 対象: XA データソース MIF02JA_JDS (java:/jdbc/MIF02JA_JDS) / Aurora MySQL 8.4 (MySQL 8.4 互換)
+# 接続先・資格情報は ECS タスク定義の environment / secrets から環境変数で渡す (イメージに焼かない)。
+#
+# 検証設定の方針 (Red Hat ナレッジ「EAP 6/7/8 JDBC datasource not fault tolerant ...」の推奨に従う):
+#   - validate-on-match=true / background-validation=false  (両方 true にはしない)
+#   - valid-connection-checker と exception-sorter は MySQL 用をペアで指定
+#       checker 無しだと検証は何もしない / sorter 無しだと致命的エラーの接続がプールに残る
+#   ⑪ IJ000621 + ⑩ IJ030027 は「貸し出し直前の検証で死んだ接続を見つけて捨てた」記録であり、
+#   アプリにはエラーを返していない (自己修復)。根本対処は「接続がプールで死なないようにする」こと:
+#   - idle-timeout-minutes を、接続が切られる時間 (MySQL wait_timeout / 経路のアイドル切断) より
+#     十分短くする。IdleRemover は idle-timeout の半分間隔で動くので、最長で約 1.5 倍まで残る。
+#       例: 経路に 350 秒で切る NAT/NLB がある → 3 分以下 (180 秒 × 1.5 = 270 秒 < 350 秒)
+#           Aurora 直結で wait_timeout=28800 (既定) → 既定 30 分でも死なない
+#   - TCP keepalive: Connector/J の tcpKeepAlive=true (既定) + ECS タスク定義の systemControls で
+#     net.ipv4.tcp_keepalive_time 等を短くする (経路のアイドル切断対策。wait_timeout には効かない)
+#   - socketTimeout: 半開き TCP で ping (検証) が長時間固まるのを防ぐ上限。最長クエリより長くする。
+#
+# track-statements: 既定は NOWARN (追跡して黙って閉じる)。
+#   ⑧⑫ が出ている = 実環境では true になっている。開発・検証環境は TRUE で閉じ忘れを見つけて直し、
+#   本番はアプリ修正後に NOWARN (安全網として閉じるが警告はしない) とするのが基本。
+# =====================================================================
+
+# --- JDBC ドライバ (モジュール com.mysql は Dockerfile が配置する) ---
+#   driver-name 属性は非推奨 (WFLYCTL0028)。名前はアドレス (jdbc-driver=mysql) から決まるので指定しない。
+if (outcome != success) of /subsystem=datasources/jdbc-driver=mysql:read-resource
+    /subsystem=datasources/jdbc-driver=mysql:add( \
+        driver-module-name=com.mysql, \
+        driver-class-name=com.mysql.cj.jdbc.Driver, \
+        driver-xa-datasource-class-name=com.mysql.cj.jdbc.MysqlXADataSource)
+end-if
+
+# --- XA データソース ---
+if (outcome != success) of /subsystem=datasources/xa-data-source=MIF02JA_JDS:read-resource
+    batch
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS:add( \
+        jndi-name=java:/jdbc/MIF02JA_JDS, \
+        driver-name=mysql, \
+        user-name="${env.DB_USER}", \
+        password="${env.DB_PASSWORD}", \
+        min-pool-size="${env.DB_MIN_POOL_SIZE:0}", \
+        max-pool-size="${env.DB_MAX_POOL_SIZE:20}", \
+        idle-timeout-minutes="${env.DB_IDLE_TIMEOUT_MIN:5}", \
+        blocking-timeout-wait-millis="${env.DB_BLOCKING_TIMEOUT_MS:5000}", \
+        validate-on-match=true, \
+        background-validation=false, \
+        valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker, \
+        exception-sorter-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter, \
+        track-statements="${env.DB_TRACK_STATEMENTS:NOWARN}", \
+        statistics-enabled=true)
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=ServerName:add(value="${env.DB_HOST}")
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=PortNumber:add(value="${env.DB_PORT:3306}")
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=DatabaseName:add(value="${env.DB_NAME}")
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=TcpKeepAlive:add(value=true)
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=ConnectTimeout:add(value="${env.DB_CONNECT_TIMEOUT_MS:10000}")
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=SocketTimeout:add(value="${env.DB_SOCKET_TIMEOUT_MS:120000}")
+    run-batch
+end-if
+
+# ---------------------------------------------------------------------
+# 参考 (この順に検討):
+#   - ping の待ちを socketTimeout ではなく秒数で区切りたい場合 (最長クエリが長く socketTimeout を
+#     大きくせざるを得ない場合) は JDBC4 の isValid(timeout) を使うチェッカーに替える:
+#       valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.novendor.JDBC4ValidConnectionChecker
+#       valid-connection-checker-properties={pingTimeOut=5}
+#   - XA リカバリ (トランザクションマネージャの定期リカバリ) で XA RECOVER を実行するため、
+#     MySQL 8.x では接続ユーザーに XA_RECOVER_ADMIN 権限が必要:  GRANT XA_RECOVER_ADMIN ON *.* TO '<user>'@'%';
+# ---------------------------------------------------------------------

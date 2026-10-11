@@ -1,0 +1,56 @@
+# =====================================================================
+# 20-logging.cli
+#
+# ④ WFLYEE0007 (Not installing optional component ...) の「Spring の分だけ」を抑止する
+#
+#   仕組み: Undertow (WebComponentProcessor) は WAR 内の jakarta.servlet.AsyncListener 実装クラスを
+#   すべて「注入対象の Web コンポーネント (オプション)」として登録する。Weld (CDI) が無効の WAR では
+#   EE サブシステムが引数なしコンストラクタでインスタンス化しようとするが、Spring の
+#   ServletServerHttpResponse$ResponseAsyncListener などは非 static の内部クラス
+#   (コンストラクタが外側のインスタンスを引数に取る) のため WFLYEE0048 (Could not find default
+#   constructor) となり、オプション扱いなので WFLYEE0007 の WARN だけを出して登録をやめる。
+#   Spring はこれらのリスナーを自分で new して使うため、動作への影響は無い (検証で確認)。
+#
+#   方針: 必ず先に DEBUG で原因が WFLYEE0048 であることを確認してから入れる (下の「調査用」)。
+#   フィルタは org.jboss.as.ee カテゴリの、メッセージが
+#     "WFLYEE0007: Not installing optional component org.springframework."
+#   で始まるものだけを捨てる。jboss-logmanager の match() は整形後のメッセージに部分一致する。
+#   Spring 以外のクラスの WFLYEE0007 (本当に見たいもの) はそのまま出る。
+# =====================================================================
+if (outcome != success) of /subsystem=logging/logger=org.jboss.as.ee:read-resource
+    /subsystem=logging/logger=org.jboss.as.ee:add(filter-spec="not(match(\"WFLYEE0007: Not installing optional component org.springframework.\"))")
+end-if
+
+# =====================================================================
+# ③ WFLYSRV0018 (private モジュールの使用) のうち、spring-core 由来の org.jboss.vfs だけを抑止する
+#
+#   spring-core-6.x.jar の META-INF/MANIFEST.MF には JBoss Modules 用の
+#     Dependencies: jdk.unsupported,org.jboss.vfs
+#   が書かれている (Spring が JBoss の VFS 上でクラスパス走査をするため)。MANIFEST の Dependencies は
+#   「ユーザー指定の依存」として扱われ、org.jboss.vfs は private なので Spring を使う WAR では必ず出る。
+#   アプリ側で消すには spring-core の jar を改変するしかなく非推奨なので、この 1 モジュール分だけ絞って抑止する。
+#   jboss-deployment-structure.xml の org.apache.cxf.impl のような「自分で書いた private 依存」は抑止しない
+#   (そちらは依存を外して直す)。
+# =====================================================================
+if (outcome != success) of /subsystem=logging/logger=org.jboss.as.dependency.private:read-resource
+    /subsystem=logging/logger=org.jboss.as.dependency.private:add(filter-spec="not(match(\"WFLYSRV0018: .*org.jboss.vfs\"))")
+end-if
+
+# ---------------------------------------------------------------------
+# 調査用 (必要なときだけ jboss-cli で接続して実行し、終わったら戻す。ここでは実行しない)
+#   ④ の原因 (DEBUG の 2 行目) を見る:
+#     /subsystem=logging/logger=org.jboss.as.ee:write-attribute(name=level, value=DEBUG)
+#     /subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=DEBUG)
+#     (再デプロイして "WFLYEE0048: Could not find default constructor" を確認)
+#     /subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=INFO)
+#     /subsystem=logging/logger=org.jboss.as.ee:undefine-attribute(name=level)
+#
+#   ⑥ アプリに Log4j 2 実装 (log4j-core) を同梱して自前の log4j2.xml で出したい場合だけ:
+#     (サーバ全体に効く点に注意。通常は jboss-deployment-structure.xml で
+#      org.apache.logging.log4j.api を除外する方が影響範囲が狭い)
+#     /subsystem=logging:write-attribute(name=add-logging-api-dependencies, value=false)
+#
+#   CloudWatch Logs Insights で扱いやすい JSON 形式にする場合 (任意):
+#     /subsystem=logging/json-formatter=JSON:add(exception-output-type=formatted, pretty-print=false)
+#     /subsystem=logging/console-handler=CONSOLE:write-attribute(name=named-formatter, value=JSON)
+# ---------------------------------------------------------------------

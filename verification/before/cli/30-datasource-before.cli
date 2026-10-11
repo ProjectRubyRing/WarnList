@@ -1,0 +1,17 @@
+# 検証用「修正前」データソース (実環境のログから推定した状態を再現する)
+#   - validate-on-match=true + MySQLValidConnectionChecker  … ⑪ がリクエスト処理スレッドで出ている = 貸し出し時検証
+#   - background-validation なし                              … ⑪ の lastValidated が 19 分前 (背景検証で更新されていない)
+#   - exception-sorter なし / idle-timeout-minutes は既定 (30 分)
+#   - track-statements=true                                    … ⑧⑫ が出ている (既定は NOWARN)
+#   - org.wildfly.sigterm.suspend.timeout なし (既定 0)        … ⑬
+if (outcome != success) of /subsystem=datasources/jdbc-driver=mysql:read-resource
+    /subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql, driver-module-name=com.mysql, driver-class-name=com.mysql.cj.jdbc.Driver, driver-xa-datasource-class-name=com.mysql.cj.jdbc.MysqlXADataSource)
+end-if
+if (outcome != success) of /subsystem=datasources/xa-data-source=MIF02JA_JDS:read-resource
+    batch
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS:add(jndi-name=java:/jdbc/MIF02JA_JDS, driver-name=mysql, user-name="${env.DB_USER}", password="${env.DB_PASSWORD}", validate-on-match=true, valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker, track-statements=TRUE)
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=ServerName:add(value="${env.DB_HOST}")
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=PortNumber:add(value="${env.DB_PORT:3306}")
+    /subsystem=datasources/xa-data-source=MIF02JA_JDS/xa-datasource-properties=DatabaseName:add(value="${env.DB_NAME}")
+    run-batch
+end-if

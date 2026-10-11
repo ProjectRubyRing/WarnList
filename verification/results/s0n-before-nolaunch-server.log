@@ -1,0 +1,438 @@
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /opt/jboss-eap
+
+  JAVA: /usr/lib/jvm/jre-21-openjdk/bin/java
+
+  JAVA_OPTS:  -Djdk.serialFilter="maxbytes=10485760;maxdepth=128;maxarray=100000;maxrefs=300000" -Xms64m -Xmx512m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true  --add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED --add-exports=jdk.naming.dns/com.sun.jndi.dns=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED -Djava.security.manager=allow
+
+=========================================================================
+
+05:34:13,196 INFO  [org.jboss.modules] (main) JBoss Modules version 2.1.6.Final
+05:34:13,724 INFO  [org.jboss.msc] (main) JBoss MSC version 1.5.5.Final
+05:34:13,729 INFO  [org.jboss.threads] (main) JBoss Threads version 2.4.0.Final
+05:34:13,815 INFO  [org.jboss.as] (MSC service thread 1-1) WFLYSRV0049: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) starting
+05:34:13,872 INFO  [org.jboss.vfs] (MSC service thread 1-2) VFS000002: Failed to clean existing content for temp file provider of type temp. Enable DEBUG level log to find what caused this
+05:34:14,577 INFO  [org.wildfly.security] (Controller Boot Thread) ELY00001: WildFly Elytron version 2.6.0.Final
+05:34:15,107 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 15) WFLYDR0001: Content added at location /opt/jboss-eap/standalone/data/content/dd/4cbc80601e60e41436c330a65cb45211c561da/content
+05:34:15,345 INFO  [org.jboss.as.repository] (ServerService Thread Pool -- 15) WFLYDR0001: Content added at location /opt/jboss-eap/standalone/data/content/d9/7540f30af9444af056f5c321d498241ffde9a5/content
+05:34:15,362 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0039: Creating http management service using socket-binding (management-http)
+05:34:15,374 INFO  [org.xnio] (MSC service thread 1-2) XNIO version 3.8.16.Final
+05:34:15,381 INFO  [org.xnio.nio] (MSC service thread 1-2) XNIO NIO Implementation Version 3.8.16.Final
+05:34:15,436 INFO  [org.jboss.remoting] (MSC service thread 1-4) JBoss Remoting version 5.0.30.Final
+05:34:15,437 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-6) WFLYSRV0027: Starting deployment of "iwinmichl.war" (runtime-name: "iwinmichl.war")
+05:34:15,442 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-1) WFLYSRV0027: Starting deployment of "ws-backend.war" (runtime-name: "ws-backend.war")
+05:34:15,457 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 44) WFLYJCA0004: Deploying JDBC-compliant driver class org.h2.Driver (version 2.2)
+05:34:15,466 INFO  [org.wildfly.extension.elytron.oidc._private] (ServerService Thread Pool -- 53) WFLYOIDC0001: Activating WildFly Elytron OIDC Subsystem
+05:34:15,466 INFO  [org.wildfly.extension.health] (ServerService Thread Pool -- 54) WFLYHEALTH0001: Activating Base Health Subsystem
+05:34:15,470 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 55) WFLYCLINF0001: Activating Infinispan subsystem.
+05:34:15,482 INFO  [org.jboss.as.jaxrs] (ServerService Thread Pool -- 57) WFLYRS0016: RESTEasy version 6.2.11.Final
+05:34:15,497 INFO  [org.jboss.as.connector] (MSC service thread 1-7) WFLYJCA0009: Starting Jakarta Connectors Subsystem (WildFly/IronJacamar 3.0.10.Final)
+05:34:15,500 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-3) WFLYJCA0018: Started Driver service with driver-name = h2
+05:34:15,511 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-4) WFLYELY00023: KeyStore file '/opt/jboss-eap/standalone/configuration/application.keystore' does not exist. Used blank.
+05:34:15,521 INFO  [org.wildfly.extension.io] (ServerService Thread Pool -- 56) WFLYIO001: Worker 'default' has auto-configured to 8 IO threads with 64 max task threads based on your 4 available processors
+05:34:15,523 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-4) WFLYELY01084: KeyStore /opt/jboss-eap/standalone/configuration/application.keystore not found, it will be auto-generated on first use with a self-signed certificate for host localhost
+05:34:15,568 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 44) WFLYJCA0005: Deploying non-JDBC-compliant driver class com.mysql.cj.jdbc.Driver (version 26.7)
+05:34:15,568 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-1) WFLYJCA0018: Started Driver service with driver-name = mysql
+05:34:15,596 INFO  [org.jboss.as.jsf] (ServerService Thread Pool -- 62) WFLYJSF0007: Activated the following Jakarta Server Faces Implementations: [main]
+05:34:15,610 INFO  [org.jboss.as.ejb3] (MSC service thread 1-1) WFLYEJB0482: Strict pool mdb-strict-max-pool is using a max instance size of 16 (per class), which is derived from the number of CPUs on this host.
+05:34:15,609 INFO  [org.wildfly.extension.microprofile.config.smallrye] (ServerService Thread Pool -- 65) WFLYCONF0001: Activating MicroProfile Config Subsystem
+05:34:15,611 INFO  [org.jboss.as.ejb3] (MSC service thread 1-5) WFLYEJB0481: Strict pool slsb-strict-max-pool is using a max instance size of 16 (per class), which is derived from thread worker pool sizing.
+05:34:15,617 INFO  [org.wildfly.extension.microprofile.jwt.smallrye] (ServerService Thread Pool -- 66) WFLYJWT0001: Activating MicroProfile JWT Subsystem
+05:34:15,629 INFO  [org.jboss.as.naming] (ServerService Thread Pool -- 67) WFLYNAM0001: Activating Naming Subsystem
+05:34:15,637 INFO  [org.wildfly.extension.metrics] (ServerService Thread Pool -- 64) WFLYMETRICS0001: Activating Base Metrics Subsystem
+05:34:15,657 INFO  [org.jboss.as.naming] (MSC service thread 1-7) WFLYNAM0003: Starting Naming Service
+05:34:15,658 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-4) WFLYMAIL0001: Bound mail session [java:jboss/mail/Default]
+05:34:15,736 WARN  [org.jboss.as.txn] (ServerService Thread Pool -- 74) WFLYTX0013: The node-identifier attribute on the /subsystem=transactions is set to the default value. This is a danger for environments running multiple servers. Please make sure the attribute value is unique.
+05:34:15,742 INFO  [org.jboss.as.webservices] (ServerService Thread Pool -- 76) WFLYWS0002: Activating WebServices Extension
+05:34:15,787 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-6) WFLYUT0003: Undertow 2.3.18.Final starting
+05:34:15,849 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 75) WFLYUT0014: Creating file handler for path '/opt/jboss-eap/welcome-content' with options [directory-listing: 'false', follow-symlink: 'false', case-sensitive: 'true', safe-symlink-paths: '[]']
+05:34:15,854 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-1) WFLYUT0012: Started server default-server.
+05:34:15,856 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-1) Queuing requests.
+05:34:15,857 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-1) WFLYUT0018: Host default-host starting
+05:34:15,879 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-6) WFLYUT0006: Undertow HTTP listener default listening on 0.0.0.0:8080
+05:34:15,929 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-2) WFLYUT0006: Undertow HTTPS listener https listening on 0.0.0.0:8443
+05:34:15,982 INFO  [org.jboss.as.server.deployment.scanner] (MSC service thread 1-5) WFLYDS0013: Started FileSystemDeploymentService for directory /opt/jboss-eap/standalone/deployments
+05:34:16,001 INFO  [org.jboss.as.ejb3] (MSC service thread 1-4) WFLYEJB0493: Jakarta Enterprise Beans subsystem suspension complete
+05:34:16,061 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-1) WFLYJCA0001: Bound data source [java:jboss/datasources/ExampleDS]
+05:34:16,061 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-4) WFLYJCA0001: Bound data source [java:/jdbc/MIF02JA_JDS]
+05:34:16,066 INFO  [org.jboss.ws.common.management] (MSC service thread 1-5) JBWS022052: Starting JBossWS 7.3.1.Final (Apache CXF 4.0.6) 
+05:34:16,746 INFO  [org.jboss.ws.cxf.metadata] (MSC service thread 1-4) JBWS024061: Adding service endpoint metadata: id=com.example.wsbackend.SlowService
+ address=http://172.18.0.4:8080/ws-backend/SlowService
+ implementor=com.example.wsbackend.SlowService
+ serviceName={http://wsbackend.example.com/}SlowService
+ portName={http://wsbackend.example.com/}SlowServicePort
+ annotationWsdlLocation=null
+ wsdlLocationOverride=null
+ mtomEnabled=false
+05:34:17,196 WARN  [org.jboss.as.server.deployment] (MSC service thread 1-6) WFLYSRV0058: Additional resource root /content/iwinmichl.war/WEB-INF/classes/testClasses added via jboss-deployment-structure.xml does not exist
+05:34:17,343 INFO  [org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean] (MSC service thread 1-4) Creating Service {http://wsbackend.example.com/}SlowService from class com.example.wsbackend.SlowService
+05:34:17,350 WARN  [org.jboss.as.dependency.private] (MSC service thread 1-5) WFLYSRV0018: Deployment "deployment.iwinmichl.war" is using a private module ("org.apache.cxf.impl") which may be changed or removed in future versions without notice.
+05:34:17,350 WARN  [org.jboss.as.dependency.private] (MSC service thread 1-5) WFLYSRV0018: Deployment "deployment.iwinmichl.war" is using a private module ("org.jboss.vfs") which may be changed or removed in future versions without notice.
+05:34:17,419 WARN  [org.jboss.modules.define] (MSC service thread 1-2) Failed to define class javax.servlet.jsp.jstl.tlv.PermittedTaglibsTLV in Module "deployment.iwinmichl.war" from Service Module Loader: java.lang.NoClassDefFoundError: Failed to link javax/servlet/jsp/jstl/tlv/PermittedTaglibsTLV (Module "deployment.iwinmichl.war" from Service Module Loader): javax/servlet/jsp/tagext/TagLibraryValidator
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1105)
+	at org.jboss.modules.ModuleClassLoader.doDefineOrLoadClass(ModuleClassLoader.java:352)
+	at org.jboss.modules.ModuleClassLoader.defineClass(ModuleClassLoader.java:483)
+	at org.jboss.modules.ModuleClassLoader.loadClassLocal(ModuleClassLoader.java:277)
+	at org.jboss.modules.ModuleClassLoader$1.loadClassLocal(ModuleClassLoader.java:79)
+	at org.jboss.modules.Module.loadModuleClass(Module.java:798)
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:193)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.utils.ClassLoadingUtils.loadClass(ClassLoadingUtils.java:26)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.utils.ClassLoadingUtils.loadClass(ClassLoadingUtils.java:19)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.component.deployers.InterceptorAnnotationProcessor.processComponentConfig(InterceptorAnnotationProcessor.java:67)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.component.deployers.InterceptorAnnotationProcessor.deploy(InterceptorAnnotationProcessor.java:60)
+	at org.jboss.as.server@27.0.1.Final//org.jboss.as.server.deployment.DeploymentUnitPhaseService.start(DeploymentUnitPhaseService.java:165)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:1617)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.execute(ServiceControllerImpl.java:1580)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$ControllerTask.run(ServiceControllerImpl.java:1438)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: javax.servlet.jsp.tagext.TagLibraryValidator from [Module "deployment.iwinmichl.war" from Service Module Loader]
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:201)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	... 28 more
+
+05:34:17,439 WARN  [org.jboss.modules.define] (MSC service thread 1-2) Failed to define class javax.servlet.jsp.jstl.tlv.ScriptFreeTLV in Module "deployment.iwinmichl.war" from Service Module Loader: java.lang.NoClassDefFoundError: Failed to link javax/servlet/jsp/jstl/tlv/ScriptFreeTLV (Module "deployment.iwinmichl.war" from Service Module Loader): javax/servlet/jsp/tagext/TagLibraryValidator
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1105)
+	at org.jboss.modules.ModuleClassLoader.doDefineOrLoadClass(ModuleClassLoader.java:352)
+	at org.jboss.modules.ModuleClassLoader.defineClass(ModuleClassLoader.java:483)
+	at org.jboss.modules.ModuleClassLoader.loadClassLocal(ModuleClassLoader.java:277)
+	at org.jboss.modules.ModuleClassLoader$1.loadClassLocal(ModuleClassLoader.java:79)
+	at org.jboss.modules.Module.loadModuleClass(Module.java:798)
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:193)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.utils.ClassLoadingUtils.loadClass(ClassLoadingUtils.java:26)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.utils.ClassLoadingUtils.loadClass(ClassLoadingUtils.java:19)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.component.deployers.InterceptorAnnotationProcessor.processComponentConfig(InterceptorAnnotationProcessor.java:67)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.component.deployers.InterceptorAnnotationProcessor.deploy(InterceptorAnnotationProcessor.java:60)
+	at org.jboss.as.server@27.0.1.Final//org.jboss.as.server.deployment.DeploymentUnitPhaseService.start(DeploymentUnitPhaseService.java:165)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:1617)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.execute(ServiceControllerImpl.java:1580)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$ControllerTask.run(ServiceControllerImpl.java:1438)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: javax.servlet.jsp.tagext.TagLibraryValidator from [Module "deployment.iwinmichl.war" from Service Module Loader]
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:201)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	... 28 more
+
+05:34:17,523 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component org.springframework.http.server.reactive.ServletServerHttpRequest$RequestAsyncListener due to an exception (enable DEBUG log level to see the cause)
+05:34:17,524 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component org.springframework.web.filter.ServerHttpObservationFilter$ObservationAsyncListener due to an exception (enable DEBUG log level to see the cause)
+05:34:17,545 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component org.springframework.http.server.ServletServerHttpAsyncRequestControl due to an exception (enable DEBUG log level to see the cause)
+05:34:17,546 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component org.springframework.web.context.request.async.StandardServletAsyncWebRequest due to an exception (enable DEBUG log level to see the cause)
+05:34:17,547 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component org.springframework.http.server.reactive.ServletHttpHandlerAdapter$HttpHandlerAsyncListener due to an exception (enable DEBUG log level to see the cause)
+05:34:17,564 WARN  [org.jboss.modules.define] (MSC service thread 1-3) Failed to define class javax.servlet.jsp.jstl.tlv.PermittedTaglibsTLV in Module "deployment.iwinmichl.war" from Service Module Loader: java.lang.NoClassDefFoundError: Failed to link javax/servlet/jsp/jstl/tlv/PermittedTaglibsTLV (Module "deployment.iwinmichl.war" from Service Module Loader): javax/servlet/jsp/tagext/TagLibraryValidator
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1105)
+	at org.jboss.modules.ModuleClassLoader.doDefineOrLoadClass(ModuleClassLoader.java:352)
+	at org.jboss.modules.ModuleClassLoader.defineClass(ModuleClassLoader.java:483)
+	at org.jboss.modules.ModuleClassLoader.loadClassLocal(ModuleClassLoader.java:277)
+	at org.jboss.modules.ModuleClassLoader$1.loadClassLocal(ModuleClassLoader.java:79)
+	at org.jboss.modules.Module.loadModuleClass(Module.java:798)
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:193)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.utils.ClassLoadingUtils.loadClass(ClassLoadingUtils.java:26)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.component.deployers.EEModuleConfigurationProcessor.deploy(EEModuleConfigurationProcessor.java:63)
+	at org.jboss.as.server@27.0.1.Final//org.jboss.as.server.deployment.DeploymentUnitPhaseService.start(DeploymentUnitPhaseService.java:165)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:1617)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.execute(ServiceControllerImpl.java:1580)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$ControllerTask.run(ServiceControllerImpl.java:1438)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: javax.servlet.jsp.tagext.TagLibraryValidator from [Module "deployment.iwinmichl.war" from Service Module Loader]
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:201)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	... 26 more
+
+05:34:17,565 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component javax.servlet.jsp.jstl.tlv.PermittedTaglibsTLV due to an exception (enable DEBUG log level to see the cause)
+05:34:17,581 INFO  [org.apache.cxf.endpoint.ServerImpl] (MSC service thread 1-4) Setting the server's publish address to be http://172.18.0.4:8080/ws-backend/SlowService
+05:34:17,590 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component org.springframework.http.server.reactive.ServletServerHttpResponse$ResponseAsyncListener due to an exception (enable DEBUG log level to see the cause)
+05:34:17,595 WARN  [org.jboss.modules.define] (MSC service thread 1-3) Failed to define class javax.servlet.jsp.jstl.tlv.ScriptFreeTLV in Module "deployment.iwinmichl.war" from Service Module Loader: java.lang.NoClassDefFoundError: Failed to link javax/servlet/jsp/jstl/tlv/ScriptFreeTLV (Module "deployment.iwinmichl.war" from Service Module Loader): javax/servlet/jsp/tagext/TagLibraryValidator
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1105)
+	at org.jboss.modules.ModuleClassLoader.doDefineOrLoadClass(ModuleClassLoader.java:352)
+	at org.jboss.modules.ModuleClassLoader.defineClass(ModuleClassLoader.java:483)
+	at org.jboss.modules.ModuleClassLoader.loadClassLocal(ModuleClassLoader.java:277)
+	at org.jboss.modules.ModuleClassLoader$1.loadClassLocal(ModuleClassLoader.java:79)
+	at org.jboss.modules.Module.loadModuleClass(Module.java:798)
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:193)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:536)
+	at java.base/java.lang.Class.forName(Class.java:515)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.utils.ClassLoadingUtils.loadClass(ClassLoadingUtils.java:26)
+	at org.jboss.as.ee@35.0.1.Final//org.jboss.as.ee.component.deployers.EEModuleConfigurationProcessor.deploy(EEModuleConfigurationProcessor.java:63)
+	at org.jboss.as.server@27.0.1.Final//org.jboss.as.server.deployment.DeploymentUnitPhaseService.start(DeploymentUnitPhaseService.java:165)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:1617)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$StartTask.execute(ServiceControllerImpl.java:1580)
+	at org.jboss.msc@1.5.5.Final//org.jboss.msc.service.ServiceControllerImpl$ControllerTask.run(ServiceControllerImpl.java:1438)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.ClassNotFoundException: javax.servlet.jsp.tagext.TagLibraryValidator from [Module "deployment.iwinmichl.war" from Service Module Loader]
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:201)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:408)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:396)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:115)
+	... 26 more
+
+05:34:17,596 WARN  [org.jboss.as.ee] (MSC service thread 1-3) WFLYEE0007: Not installing optional component javax.servlet.jsp.jstl.tlv.ScriptFreeTLV due to an exception (enable DEBUG log level to see the cause)
+05:34:17,634 WARN  [org.jboss.weld.deployer] (MSC service thread 1-3) WFLYWELD0013: Deployment iwinmichl.war contains Jakarta Contexts and Dependency Injection annotations but no bean archive was found (no beans.xml or class with bean defining annotations was present).
+05:34:17,648 INFO  [org.jboss.ws.cxf.deployment] (MSC service thread 1-4) JBWS024074: WSDL published to: file:/opt/jboss-eap/standalone/data/wsdl/ws-backend.war/SlowService.wsdl
+05:34:17,683 WARN  [org.jboss.as.server.deployment] (MSC service thread 1-5) WFLYSRV0274: Excluded dependency org.jboss.logmanager.log4j2 via jboss-deployment-structure.xml does not exist.
+05:34:17,708 INFO  [org.jboss.as.webservices] (MSC service thread 1-4) WFLYWS0003: Starting service jboss.ws.endpoint."ws-backend.war"."com.example.wsbackend.SlowService"
+05:34:17,748 INFO  [io.undertow.servlet] (ServerService Thread Pool -- 98) 1 Spring WebApplicationInitializers detected on classpath
+05:34:17,759 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 81) WFLYUT0021: Registered web context: '/ws-backend' for server 'default-server'
+05:34:17,778 INFO  [io.undertow.servlet] (ServerService Thread Pool -- 98) Initializing Spring DispatcherServlet 'dispatcher'
+05:34:17,779 INFO  [org.springframework.web.servlet.DispatcherServlet] (ServerService Thread Pool -- 98) Initializing Servlet 'dispatcher'
+05:34:18,225 INFO  [org.hibernate.validator.internal.util.Version] (ServerService Thread Pool -- 98) HV000001: Hibernate Validator 8.0.2.Final
+05:34:18,369 INFO  [org.springframework.web.servlet.DispatcherServlet] (ServerService Thread Pool -- 98) Completed initialization in 589 ms
+05:34:18,369 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 98) WFLYUT0021: Registered web context: '/iwinmichl' for server 'default-server'
+05:34:18,416 INFO  [org.jboss.as.server] (ServerService Thread Pool -- 45) WFLYSRV0010: Deployed "iwinmichl.war" (runtime-name : "iwinmichl.war")
+05:34:18,417 INFO  [org.jboss.as.server] (ServerService Thread Pool -- 45) WFLYSRV0010: Deployed "ws-backend.war" (runtime-name : "ws-backend.war")
+05:34:18,449 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0212: Resuming server
+05:34:18,454 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0060: Http management interface listening on http://127.0.0.1:9990/management
+05:34:18,454 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0051: Admin console listening on http://127.0.0.1:9990
+05:34:18,456 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5647ms - Started 906 of 1113 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+05:34:23,555 WARN  [org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver] (default task-1) Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' is not supported]
+05:34:24,774 INFO  [org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean] (default task-1) Creating Service {http://wsbackend.example.com/}SlowService from class org.apache.cxf.jaxws.support.DummyImpl
+05:34:25,900 WARNING [org.apache.cxf.phase.PhaseInterceptorChain] (default task-1) Interceptor for {http://wsbackend.example.com/}SlowService#{http://cxf.apache.org/jaxws/dispatch}Invoke has thrown exception, unwinding now: org.apache.cxf.interceptor.Fault: Could not receive Message.
+	at org.apache.cxf@4.0.6//org.apache.cxf.interceptor.MessageSenderInterceptor$MessageSenderEndingInterceptor.handleMessage(MessageSenderInterceptor.java:65)
+	at org.apache.cxf@4.0.6//org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.doInvoke(ClientImpl.java:530)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invoke(ClientImpl.java:441)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invoke(ClientImpl.java:356)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invoke(ClientImpl.java:314)
+	at org.apache.cxf@4.0.6//org.apache.cxf.endpoint.ClientImpl.invokeWrapped(ClientImpl.java:349)
+	at org.apache.cxf.impl//org.apache.cxf.jaxws.DispatchImpl.invoke(DispatchImpl.java:322)
+	at org.apache.cxf.impl//org.apache.cxf.jaxws.DispatchImpl.invoke(DispatchImpl.java:241)
+	at deployment.iwinmichl.war//com.example.iwinmichl.test.SoapClientServlet.doGet(SoapClientServlet.java:59)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:527)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.lambda$handleRequest$1(ElytronRunAsHandler.java:68)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.FlexibleIdentityAssociation.runAsFunctionEx(FlexibleIdentityAssociation.java:103)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAsFunctionEx(Scoped.java:161)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAs(Scoped.java:73)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.handleRequest(ElytronRunAsHandler.java:67)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.RedirectDirHandler.handleRequest(RedirectDirHandler.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:117)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at org.wildfly.security.elytron-web.undertow-server-servlet@4.1.0.Final//org.wildfly.elytron.web.undertow.server.servlet.CleanUpHandler.handleRequest(CleanUpHandler.java:38)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.security.jacc.JACCContextIdHandler.handleRequest(JACCContextIdHandler.java:44)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.GlobalRequestControllerHandler.handleRequest(GlobalRequestControllerHandler.java:51)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.SendErrorPageHandler.handleRequest(SendErrorPageHandler.java:52)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:276)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:132)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:256)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:101)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.Connectors.executeRootHandler(Connectors.java:395)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:861)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at org.jboss.xnio@3.8.16.Final//org.xnio.XnioWorker$WorkerThreadFactory$1$1.run(XnioWorker.java:1282)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.net.SocketTimeoutException: SocketTimeoutException invoking http://localhost:8080/ws-backend/SlowService: Read timed out
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.mapException(HTTPConduit.java:1452)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.close(HTTPConduit.java:1433)
+	at org.apache.cxf@4.0.6//org.apache.cxf.transport.AbstractConduit.close(AbstractConduit.java:56)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit.close(HTTPConduit.java:717)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HttpClientHTTPConduit.close(HttpClientHTTPConduit.java:261)
+	at org.apache.cxf@4.0.6//org.apache.cxf.interceptor.MessageSenderInterceptor$MessageSenderEndingInterceptor.handleMessage(MessageSenderInterceptor.java:63)
+	... 53 more
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:278)
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:304)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:346)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:796)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1099)
+	at java.base/java.io.BufferedInputStream.fill(BufferedInputStream.java:291)
+	at java.base/java.io.BufferedInputStream.read1(BufferedInputStream.java:347)
+	at java.base/java.io.BufferedInputStream.implRead(BufferedInputStream.java:420)
+	at java.base/java.io.BufferedInputStream.read(BufferedInputStream.java:399)
+	at java.base/sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:835)
+	at java.base/sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:767)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1730)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1632)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:531)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.URLConnectionHTTPConduit$URLConnectionWrappedOutputStream$2.run(URLConnectionHTTPConduit.java:370)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.URLConnectionHTTPConduit$URLConnectionWrappedOutputStream$2.run(URLConnectionHTTPConduit.java:366)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.URLConnectionHTTPConduit$URLConnectionWrappedOutputStream.getResponseCode(URLConnectionHTTPConduit.java:366)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.doProcessResponseCode(HTTPConduit.java:1653)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.handleResponseInternal(HTTPConduit.java:1684)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.handleResponse(HTTPConduit.java:1626)
+	at org.apache.cxf.impl//org.apache.cxf.transport.http.HTTPConduit$WrappedOutputStream.close(HTTPConduit.java:1420)
+	... 57 more
+
+05:34:25,945 INFO  [org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean] (default task-1) Creating Service {http://wsbackend.example.com/}SlowService from class org.apache.cxf.jaxws.support.DummyImpl
+05:34:26,464 WARN  [org.jboss.jca.adapters.jdbc.WrappedConnection] (default task-1) IJ030040: Closing a statement you left open, please do your own housekeeping for: java:/jdbc/MIF02JA_JDS: java.lang.Throwable: STACKTRACE
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedConnection.registerStatement(WrappedConnection.java:2076)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedStatement.<init>(WrappedStatement.java:129)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedPreparedStatement.<init>(WrappedPreparedStatement.java:84)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedPreparedStatement.<init>(WrappedPreparedStatement.java:69)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.jdk8.WrappedPreparedStatementJDK8.<init>(WrappedPreparedStatementJDK8.java:53)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.jdk8.WrappedConnectionJDK8.wrapPreparedStatement(WrappedConnectionJDK8.java:83)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedConnection.prepareStatement(WrappedConnection.java:482)
+	at deployment.iwinmichl.war//com.example.iwinmichl.test.DbServlet.leak(DbServlet.java:70)
+	at deployment.iwinmichl.war//com.example.iwinmichl.test.DbServlet.doGet(DbServlet.java:42)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:527)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.lambda$handleRequest$1(ElytronRunAsHandler.java:68)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.FlexibleIdentityAssociation.runAsFunctionEx(FlexibleIdentityAssociation.java:103)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAsFunctionEx(Scoped.java:161)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAs(Scoped.java:73)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.handleRequest(ElytronRunAsHandler.java:67)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.RedirectDirHandler.handleRequest(RedirectDirHandler.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:117)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at org.wildfly.security.elytron-web.undertow-server-servlet@4.1.0.Final//org.wildfly.elytron.web.undertow.server.servlet.CleanUpHandler.handleRequest(CleanUpHandler.java:38)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.security.jacc.JACCContextIdHandler.handleRequest(JACCContextIdHandler.java:44)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.GlobalRequestControllerHandler.handleRequest(GlobalRequestControllerHandler.java:51)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.SendErrorPageHandler.handleRequest(SendErrorPageHandler.java:52)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:276)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:132)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:256)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:101)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.Connectors.executeRootHandler(Connectors.java:395)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:861)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at org.jboss.xnio@3.8.16.Final//org.xnio.XnioWorker$WorkerThreadFactory$1$1.run(XnioWorker.java:1282)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+05:34:26,465 WARN  [org.jboss.jca.adapters.jdbc.WrappedConnection] (default task-1) IJ030042: Closing a result set you left open, please do your own housekeeping for: com.mysql.cj.jdbc.result.ResultSetImpl@47029c53: java.lang.Throwable: STACKTRACE
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedStatement.registerResultSet(WrappedStatement.java:1528)
+	at org.jboss.ironjacamar.jdbcadapters@3.0.10.Final//org.jboss.jca.adapters.jdbc.WrappedPreparedStatement.executeQuery(WrappedPreparedStatement.java:505)
+	at deployment.iwinmichl.war//com.example.iwinmichl.test.DbServlet.leak(DbServlet.java:71)
+	at deployment.iwinmichl.war//com.example.iwinmichl.test.DbServlet.doGet(DbServlet.java:42)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:527)
+	at jakarta.servlet.api@6.0.0//jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.lambda$handleRequest$1(ElytronRunAsHandler.java:68)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.FlexibleIdentityAssociation.runAsFunctionEx(FlexibleIdentityAssociation.java:103)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAsFunctionEx(Scoped.java:161)
+	at org.wildfly.security.elytron-base@2.6.0.Final//org.wildfly.security.auth.server.Scoped.runAs(Scoped.java:73)
+	at org.wildfly.security.elytron-web.undertow-server@4.1.0.Final//org.wildfly.elytron.web.undertow.server.ElytronRunAsHandler.handleRequest(ElytronRunAsHandler.java:67)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.RedirectDirHandler.handleRequest(RedirectDirHandler.java:68)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:117)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.core@2.3.18.Final//io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at org.wildfly.security.elytron-web.undertow-server-servlet@4.1.0.Final//org.wildfly.elytron.web.undertow.server.servlet.CleanUpHandler.handleRequest(CleanUpHandler.java:38)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.security.jacc.JACCContextIdHandler.handleRequest(JACCContextIdHandler.java:44)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.GlobalRequestControllerHandler.handleRequest(GlobalRequestControllerHandler.java:51)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.SendErrorPageHandler.handleRequest(SendErrorPageHandler.java:52)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:276)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:132)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at org.wildfly.extension.undertow@35.0.1.Final//org.wildfly.extension.undertow.deployment.UndertowDeploymentInfoService$UndertowThreadSetupAction.lambda$create$0(UndertowDeploymentInfoService.java:1421)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:256)
+	at io.undertow.servlet@2.3.18.Final//io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:101)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.Connectors.executeRootHandler(Connectors.java:395)
+	at io.undertow.core@2.3.18.Final//io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:861)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.ContextClassLoaderSavingRunnable.run(ContextClassLoaderSavingRunnable.java:35)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor.safeRun(EnhancedQueueExecutor.java:1990)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.doRunTask(EnhancedQueueExecutor.java:1486)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1377)
+	at org.jboss.xnio@3.8.16.Final//org.xnio.XnioWorker$WorkerThreadFactory$1$1.run(XnioWorker.java:1282)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+

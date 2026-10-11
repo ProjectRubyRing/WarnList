@@ -1,0 +1,13 @@
+# =====================================================================
+# 31-jca-ccm.cli
+#   ⑧⑫⑬ の補助: 接続の閉じ忘れ (コネクションリーク) を検出する
+#
+# cached-connection-manager (CCM) はリクエスト (EE コンポーネント呼び出し) の終わりに、
+# 閉じられていない接続を見つける仕組み。
+#   debug=true … 閉じ忘れた接続をサーバが閉じ、IJ000100 (Closing a connection for you ...) と
+#                取得箇所のスタックトレースを出す
+#   error=true … 閉じ忘れをエラー (例外) にする (開発環境向け)
+# 本番は既定 (false) のまま、調査時だけ ECS の環境変数で true にしてタスクを入れ替える。
+# =====================================================================
+/subsystem=jca/cached-connection-manager=cached-connection-manager:write-attribute(name=debug, value="${env.JCA_CCM_DEBUG:false}")
+/subsystem=jca/cached-connection-manager=cached-connection-manager:write-attribute(name=error, value="${env.JCA_CCM_ERROR:false}")

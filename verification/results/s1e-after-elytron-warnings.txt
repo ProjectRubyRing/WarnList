@@ -1,0 +1,31 @@
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  0
+  ③+   of which org.apache.cxf.impl                   0
+  ③+   of which org.jboss.vfs (spring-core)           0
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0211/0272 suspending server               1
+  ⑬+ WFLYSRV0220 shutdown requested via OS signal     1
+  ⑬+ IJ030022 lock owned during cleanup               0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 0

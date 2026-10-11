@@ -1,0 +1,47 @@
+# =====================================================================
+# 10-elytron-outbound-truststore.cli   (TRUST_MODE=elytron のときだけ適用)
+#   ① 関連: 自己署名ルート CA (extraslb 等) を信頼するアウトバウンド TLS 設定
+#
+# Container_ExtraSLB_JVM_https_outbounds の configure-outbound-tls.cli と同じ構成に、
+# 次の改善を加えたもの:
+#   - key-store に required=true を付ける
+#       トラストストアのパスを誤ったとき「WFLYELY00023 ... Used blank.」(警告のみ) で
+#       空のトラストストアのまま起動し、default-ssl-context 経由のアウトバウンド TLS が
+#       全滅する事故を防ぐ。required=true なら WFLYELY00022 で該当サービスが起動失敗し、
+#       問題が起動時点で確実に見える (entrypoint.sh の事前チェックと二重の安全策)。
+#   - 既存リソースがあっても required を必ず true にそろえる (冪等)
+#
+# ※ TRUST_MODE=system (推奨) では本ファイルは使わない。
+#    CA を UBI のシステムトラストストア (update-ca-trust) に入れるため、
+#    JDK 既定の cacerts だけで全クライアントが信頼でき、Elytron 側の設定も -D 引数も不要になる。
+# =====================================================================
+
+# --- 1. トラストストア (cacerts のコピー + 受領した CA 証明書群) ---
+if (outcome != success) of /subsystem=elytron/key-store=extraslb-trust-store:read-resource
+    /subsystem=elytron/key-store=extraslb-trust-store:add( \
+        path="${env.EXTRASLB_TRUSTSTORE_PATH:/opt/app/security/extraslb-truststore.p12}", \
+        type="${env.EXTRASLB_TRUSTSTORE_TYPE:PKCS12}", \
+        required=true, \
+        credential-reference={clear-text="${env.EXTRASLB_TRUSTSTORE_PASSWORD:changeit}"} \
+    )
+end-if
+/subsystem=elytron/key-store=extraslb-trust-store:write-attribute(name=required, value=true)
+
+# --- 2. トラストマネージャ ---
+if (outcome != success) of /subsystem=elytron/trust-manager=extraslb-trust-manager:read-resource
+    /subsystem=elytron/trust-manager=extraslb-trust-manager:add(key-store=extraslb-trust-store)
+end-if
+
+# --- 3. クライアント SSL コンテキスト ---
+if (outcome != success) of /subsystem=elytron/client-ssl-context=extraslb-client-ssl-context:read-resource
+    /subsystem=elytron/client-ssl-context=extraslb-client-ssl-context:add( \
+        trust-manager=extraslb-trust-manager, \
+        protocols=["TLSv1.3","TLSv1.2"] \
+    )
+end-if
+
+# --- 4. JVM 既定の SSLContext (SSLContext.getDefault()) として登録 ---
+#   HttpsURLConnection / java.net.http.HttpClient / RESTEasy Client 等が使う。
+#   SSLContext を自分で組み立てるライブラリ (Apache CXF の HTTPConduit など) は
+#   javax.net.ssl.trustStore を読むため、entrypoint.sh が -D 引数でも同じファイルを渡す。
+/subsystem=elytron:write-attribute(name=default-ssl-context, value=extraslb-client-ssl-context)

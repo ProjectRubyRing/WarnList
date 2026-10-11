@@ -1,0 +1,35 @@
+# =====================================================================
+# 60-undertow.cli
+#   ⑨ Resolved [HttpRequestMethodNotSupportedException ...] の調査を可能にする
+#
+# Spring の 405 ログには URL も送信元も出ない。サーバ側で
+#   (1) ALB が付ける X-Forwarded-For / X-Forwarded-Proto を信頼して、送信元 IP を正しく記録する
+#   (2) 4xx / 5xx の応答だけを JSON 形式のアクセスログとして標準出力 (= CloudWatch Logs) へ出す
+# を行い、「どこから・どの URL に・どのメソッドで」来た 405 なのかを突き止められるようにする。
+#
+# console-access-log の predicate は応答完了後に評価される (EventLoggerHttpHandler) ため、
+# 応答コード (%s) で絞り込める。全リクエストを記録したい場合は predicate を外す。
+# =====================================================================
+
+# (1) ALB の背後にいるので X-Forwarded-* を採用する (ALB 以外から直接届かないことが前提)
+/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=proxy-address-forwarding, value=true)
+#     応答時間 (response-time) を記録するにはリスナーで要求開始時刻の記録を有効にする (既定 false)
+/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=record-request-start-time, value=true)
+
+# (2) 4xx/5xx のみ JSON アクセスログ
+#     request-url はコンテキストパス込みの URL (/iwinmichl/api/hello)。request-path はコンテキスト以下だけになる
+if (outcome != success) of /subsystem=undertow/server=default-server/host=default-host/setting=console-access-log:read-resource
+    /subsystem=undertow/server=default-server/host=default-host/setting=console-access-log:add( \
+        include-host-name=false, \
+        predicate="regex(pattern=\"^[45]\", value=\"%s\", full-match=false)", \
+        attributes={ \
+            date-time={key=timestamp, date-format="yyyy-MM-dd'T'HH:mm:ss.SSSXXX"}, \
+            remote-ip={key=client}, \
+            request-method={key=method}, \
+            request-url={key=path}, \
+            query-string={key=query}, \
+            response-code={key=status}, \
+            response-time={key=ms, time-unit=MILLISECONDS}, \
+            request-header={key-prefix="h_", names=["X-Forwarded-For","User-Agent","Referer"]} \
+        })
+end-if

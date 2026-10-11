@@ -1,0 +1,448 @@
+=== S0  修正前 (EAP 既定 + ExtraSLB 方式 + 修正前 WAR, SIGTERM は JVM へ中継)
+### label=s0-before image=wl-before:1 war=iwinmichl-bad.war args=-e LAUNCH_JBOSS_IN_BACKGROUND=true
+### boot line
+05:30:51,136 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 14239ms - Started 906 of 1113 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+<html><head><title>Error</title></head><body>/iwinmichl/jstl-new.jsp</body></html>  (HTTP 404)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1482 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 266 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/leak (⑧⑫)
+leaked 1
+  (HTTP 200)
+### 170 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答:   (HTTP 000)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        1
+  ①+ WFLYELY01084 self-signed will be generated       1
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         1
+③    WFLYSRV0018 private module used                  2
+④    WFLYEE0007 optional component not installed      8
+  ④+   of which org.springframework.*                 6
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       2
+⑤    WFLYWELD0013 CDI annotations, no bean archive     1
+⑥    WFLYSRV0274 excluded dependency does not exist     1
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   4
+⑧    IJ030040 statement left open                     1
+⑨    Resolved [...HttpRequestMethodNotSupported...]     1
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     0
+⑩    IJ030027 destroying connection not valid         1
+⑪    IJ000621 destroying conn. not validated          1
+⑫    IJ030042 result set left open                    1
+⑬    IJ000615 destroying active connection            1
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0272 suspending server (SIGTERM etc.)     1
+  他  WFLYTX0013 node-identifier is default            1
+
+total (①〜⑬ 本体) = 24
+=== S0n 修正前 + SIGTERM を中継しない (LAUNCH_JBOSS_IN_BACKGROUND 未設定)
+### label=s0n-before-nolaunch image=wl-before:1 war=iwinmichl-bad.war args=
+### boot line
+05:34:18,456 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5647ms - Started 906 of 1113 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+<html><head><title>Error</title></head><body>/iwinmichl/jstl-new.jsp</body></html>  (HTTP 404)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1150 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 231 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/leak (⑧⑫)
+leaked 1
+  (HTTP 200)
+### 5 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 91 秒 / コンテナ終了コード: 137
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        1
+  ①+ WFLYELY01084 self-signed will be generated       1
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         1
+③    WFLYSRV0018 private module used                  2
+④    WFLYEE0007 optional component not installed      8
+  ④+   of which org.springframework.*                 6
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       2
+⑤    WFLYWELD0013 CDI annotations, no bean archive     1
+⑥    WFLYSRV0274 excluded dependency does not exist     1
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   4
+⑧    IJ030040 statement left open                     1
+⑨    Resolved [...HttpRequestMethodNotSupported...]     1
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     0
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    1
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0272 suspending server (SIGTERM etc.)     0
+  他  WFLYTX0013 node-identifier is default            1
+
+total (①〜⑬ 本体) = 21
+=== S1  修正後 (TRUST_MODE=system / INBOUND_HTTPS_MODE=remove + 修正後 WAR)
+### label=s1-after-system image=wl-after-system-remove:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE
+### boot line
+05:36:14,308 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5801ms - Started 597 of 804 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1184 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 231 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 170 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  1
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0272 suspending server (SIGTERM etc.)     0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 1
+=== S1e 修正後 (TRUST_MODE=elytron / remove)
+### label=s1e-after-elytron image=wl-after-elytron-remove:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE
+### boot line
+05:39:37,283 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5727ms - Started 601 of 808 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1167 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 233 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 5 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  1
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0272 suspending server (SIGTERM etc.)     0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 1
+=== S1d 修正後 (TRUST_MODE=system / INBOUND_HTTPS_MODE=dedicated)
+### label=s1d-after-dedicated image=wl-after-system-dedicated:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE -e INBOUND_KEYSTORE_PASSWORD=inboundpass -v C:/Users/taka_/AppData/Local/Temp/claude/C--Users-taka--Claude-WarnList/f23f9fb0-6d62-400f-90fe-c42220846f6f/scratchpad/work/pki/inbound:/opt/app/runtime-security:ro
+### boot line
+05:40:14,748 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5182ms - Started 602 of 809 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1176 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 246 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 5 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  1
+  ③+   of which org.apache.cxf.impl                   0
+  ③+   of which org.jboss.vfs (spring-core)           1
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0211/0272 suspending server               1
+  ⑬+ WFLYSRV0220 shutdown requested via OS signal     1
+  ⑬+ IJ030022 lock owned during cleanup               0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 1
+########## E1 現行 (修正前イメージ): p12 は /opt/app/security、-Djavax.net.ssl.trustStore* を standalone.sh 引数で渡す
+--- e1-current: boot result / keystore 関連 / サービス失敗
+05:40:50,679 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-6) WFLYELY00023: KeyStore file '/opt/jboss-eap/standalone/configuration/application.keystore' does not exist. Used blank.
+05:40:50,686 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-1) WFLYELY01084: KeyStore /opt/jboss-eap/standalone/configuration/application.keystore not found, it will be auto-generated on first use with a self-signed certificate for host localhost
+05:40:53,271 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 4970ms - Started 533 of 740 services (329 services are lazy, passive or on-demand) - Server configuration file in use: standalon
+--- outbound TLS probe (https://extraslb-test/)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+--- 8443: subject=CN=localhost
+
+########## E2 Q2: 引数で -Djavax.net.ssl.keyStore=<p12> も渡す
+--- e2-keystore-arg: boot result / keystore 関連 / サービス失敗
+05:41:03,046 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-1) WFLYELY00023: KeyStore file '/opt/jboss-eap/standalone/configuration/application.keystore' does not exist. Used blank.
+05:41:03,075 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-1) WFLYELY01084: KeyStore /opt/jboss-eap/standalone/configuration/application.keystore not found, it will be auto-generated on first use with a self-signed certificate for host localhost
+05:41:05,744 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5033ms - Started 533 of 740 services (329 services are lazy, passive or on-demand) - Server configuration file in use: standalon
+
+########## E3 現行設定 (required=false) で自前トラストストアのパスを誤る
+--- e3-wrongpath-current: boot result / keystore 関連 / サービス失敗
+05:41:13,973 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-2) WFLYELY00023: KeyStore file '/opt/jboss-eap/standalone/configuration/application.keystore' does not exist. Used blank.
+05:41:13,984 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-3) WFLYELY00023: KeyStore file '/opt/app/security/NOT-EXIST.p12' does not exist. Used blank.
+05:41:13,988 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-5) WFLYELY01084: KeyStore /opt/jboss-eap/standalone/configuration/application.keystore not found, it will be auto-generated on first use with a self-signed certificate for host localhost
+05:41:16,434 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 4895ms - Started 533 of 740 services (329 services are lazy, passive or on-demand) - Server configuration file in use: standalon
+--- outbound TLS probe (https://extraslb-test/)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/NOT-EXIST.p12
+A HttpsURLConnection(default)         -> NG  InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty
+B java.net.http.HttpClient(default)   -> NG  InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty
+C new SSLContext(TLS).init(null,...)  -> NG  SunCertPathBuilderException: unable to find valid certification path to requested target
+--- outbound TLS probe (https://www.google.com/)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/NOT-EXIST.p12
+A HttpsURLConnection(default)         -> NG  InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty
+B java.net.http.HttpClient(default)   -> NG  InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+
+########## E4 修正後 elytron (required=true) で自前トラストストアのパスを誤る (entrypoint の事前チェックを迂回)
+--- e4-wrongpath-required: boot result / keystore 関連 / サービス失敗
+Caused by: org.jboss.msc.service.StartException in anonymous service: WFLYELY00022: KeyStore file '/opt/app/security/NOT-EXIST.p12' does not exist and required.
+    Caused by: org.jboss.msc.service.StartException in anonymous service: WFLYELY00022: KeyStore file '/opt/app/security/NOT-EXIST.p12' does not exist and required."}}
+WFLYCTL0186:   Services which failed to start:      service org.wildfly.security.key-store.extraslb-trust-store: WFLYELY00004: Unable to start the service.
+WFLYCTL0448: 3 additional services are down due to their dependencies being missing or failed
+05:41:26,959 ERROR [org.jboss.as] (Controller Boot Thread) WFLYSRV0026: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started (with errors) in 3909ms - Started 348 of 568 services (5 services failed or missing dependencies, 326 services are lazy, passive or
+--- outbound TLS probe (https://extraslb-test/)
+<html><head><title>Error</title></head><body>404 - Not Found</body></html>--- 参考: entrypoint 経由なら起動前に止まる
+==> [entrypoint] FATAL: トラストストアが読めません: /opt/app/security/NOT-EXIST.p12
+
+########## E5 ExtraSLB の事前生成方式 (provision-application-keystore.sh を起動前に実行)
+--- e5-provision: boot result / keystore 関連 / サービス失敗
+==> [app-keystore]   -> EAP が初回 HTTPS 接続時に自動生成するものと同じ内容です (WFLYELY00023/01084 が出なくなります)
+05:41:37,890 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 4919ms - Started 533 of 740 services (329 services are lazy, passive or on-demand) - Server configuration file in use: standalon
+--- 8443: subject=CN=localhost
+
+########## E6 remove / dedicated の 8443
+--- e6-remove: boot result / keystore 関連 / サービス失敗
+05:41:49,059 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5053ms - Started 528 of 735 services (329 services are lazy, passive or on-demand) - Server configuration file in use: standalon
+--- 8443: 接続できない (待ち受けなし)
+--- e6-dedicated: boot result / keystore 関連 / サービス失敗
+05:42:00,942 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5215ms - Started 533 of 740 services (329 services are lazy, passive or on-demand) - Server configuration file in use: standalon
+--- 8443: subject=O=Verification, CN=iwinmichl.internal
+--- 参考: dedicated で鍵ストアを渡し忘れた場合 (entrypoint)
+==> [entrypoint] FATAL: インバウンド用鍵ストアがありません: /opt/app/runtime-security/inbound-server.p12
+
+########## E7 TRUST_MODE=system: JDK cacerts に CA が入っていること / -D なし
+/etc/pki/ca-trust/extracted/java/cacerts
+extraslbtestrootca, Oct 11, 2026, trustedCertEntry, 
+Certificate fingerprint (SHA-256): CA:93:57:A2:E6:55:25:CE:80:77:28:08:9B:2D:71:6A:C8:86:A2:F4:17:6F:34:A7:8F:32:72:1C:7E:5F:D6:BA
+extraslb-ca-1.pem
+=== ALL DONE

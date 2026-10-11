@@ -1,0 +1,22 @@
+# =====================================================================
+# 00-system-properties.cli
+#   ⑬ IJ000615 (Destroying active connection in pool) 対処 その 1
+#
+# ECS はタスク停止時に SIGTERM を送り、stopTimeout (既定 30 秒 / Fargate 最大 120 秒) 後に SIGKILL する。
+# EAP は SIGTERM を受けるとシャットダウンフックで「サスペンド → 停止」を行うが、
+# その待ち時間はシステムプロパティ org.wildfly.sigterm.suspend.timeout (秒) で決まり、
+# 未設定 (既定) は 0 = 処理中リクエストを待たない。
+#   → 処理中のリクエストが切られ、使用中の DB 接続がプール停止で破棄される (IJ000615)。
+# (JBoss EAP 8.1 構成ガイド「OS シグナルを使用してサーバーを正常にシャットダウンする」)
+#
+# 値は ECS タスク定義の環境変数 EAP_SIGTERM_SUSPEND_TIMEOUT で上書きできる。
+#   目安: 最長リクエスト処理時間 <= この値 < stopTimeout (余裕 5〜10 秒)
+#   -1 は無期限に待つ (stopTimeout で SIGKILL されるので ECS では使わない)
+#
+# system-property リソースはブート時に JVM のシステムプロパティとして設定され、
+# SIGTERM 受信時 (シャットダウンフック) に参照される。
+# ※ SIGTERM が JVM に届くこと (LAUNCH_JBOSS_IN_BACKGROUND=true) が前提。entrypoint.sh 参照。
+# =====================================================================
+if (outcome != success) of /system-property=org.wildfly.sigterm.suspend.timeout:read-resource
+    /system-property=org.wildfly.sigterm.suspend.timeout:add(value="${env.EAP_SIGTERM_SUSPEND_TIMEOUT:30}")
+end-if

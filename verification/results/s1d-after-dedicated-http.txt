@@ -1,0 +1,46 @@
+### label=s1d-after-dedicated image=wl-after-system-dedicated:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE -e INBOUND_KEYSTORE_PASSWORD=inboundpass -v C:/Users/taka_/AppData/Local/Temp/claude/C--Users-taka--Claude-WarnList/f23f9fb0-6d62-400f-90fe-c42220846f6f/scratchpad/work/pki/inbound:/opt/app/runtime-security:ro
+### boot line
+05:52:17,775 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5172ms - Started 602 of 809 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1156 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 232 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 5 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)

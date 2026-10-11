@@ -1,0 +1,18 @@
+# =====================================================================
+# 12-inbound-https-dedicated.cli   (INBOUND_HTTPS_MODE=dedicated のときだけ適用)
+#   ① の別解: ALB → タスク間も HTTPS (8443) で暗号化したい場合
+#
+# applicationKS を「起動時に用意される正式な鍵ストア」に差し替え、自己署名の自動生成をやめる。
+#   - 鍵ストアは ECS の secrets (Secrets Manager) から entrypoint.sh がファイル化する等で用意し、
+#     パスとパスワードを環境変数で渡す (イメージには焼き込まない)
+#   - required=true: ファイルが無ければ WFLYELY00022 で起動時に失敗させる (黙って空で動かさない)
+#   - ALB はターゲットの証明書を検証しない (自己署名・期限切れでも通る) ため、
+#     ALB 用途だけなら ACM 等の公開証明書は不要。ただし鍵はタスク外で管理する。
+# =====================================================================
+/subsystem=elytron/key-store=applicationKS:write-attribute(name=path, value="${env.INBOUND_KEYSTORE_PATH:/opt/app/runtime-security/inbound-server.p12}")
+/subsystem=elytron/key-store=applicationKS:undefine-attribute(name=relative-to)
+/subsystem=elytron/key-store=applicationKS:write-attribute(name=type, value="${env.INBOUND_KEYSTORE_TYPE:PKCS12}")
+/subsystem=elytron/key-store=applicationKS:write-attribute(name=required, value=true)
+/subsystem=elytron/key-store=applicationKS:write-attribute(name=credential-reference, value={clear-text="${env.INBOUND_KEYSTORE_PASSWORD}"})
+/subsystem=elytron/key-manager=applicationKM:undefine-attribute(name=generate-self-signed-certificate-host)
+/subsystem=elytron/key-manager=applicationKM:write-attribute(name=credential-reference, value={clear-text="${env.INBOUND_KEYSTORE_PASSWORD}"})

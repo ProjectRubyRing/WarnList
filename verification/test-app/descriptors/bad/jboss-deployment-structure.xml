@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  検証用「修正前」の記述子。実環境の iwinmichl.war で ②③④⑤⑥ が同時に出る状態を再現する。
+    ② WEB-INF/classes/testClasses を追加リソースルートにしている (WAR に実在しない)
+    ③ private モジュール org.apache.cxf.impl へ明示依存
+    ④⑤ jsf を除外 → spring-web の PhaseListener 実装による JSF 有効化 (= Weld デプロイ化) が起きない
+         → Weld 無しの WAR になり、④ (Spring の AsyncListener) と ⑤ が同時に出る
+    ⑥ デプロイの依存に一度も入らないモジュール org.jboss.logmanager.log4j2 を除外 (空振り)
+-->
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.3">
+    <deployment>
+        <exclude-subsystems>
+            <subsystem name="jsf"/>
+        </exclude-subsystems>
+        <resources>
+            <resource-root path="WEB-INF/classes/testClasses"/>
+        </resources>
+        <dependencies>
+            <module name="org.apache.cxf.impl"/>
+        </dependencies>
+        <exclusions>
+            <module name="org.jboss.logmanager.log4j2"/>
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>

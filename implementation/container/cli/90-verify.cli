@@ -1,0 +1,28 @@
+# =====================================================================
+# 90-verify.cli
+#   ビルド時 (embed-server) に適用結果を表示して確認する。起動後に jboss-cli.sh -c で実行してもよい。
+#   (存在しない場合は "failed" になるだけで、適用済みの設定は変更しない)
+# =====================================================================
+echo ===== [verify] 0 system-property (⑬)
+/system-property=org.wildfly.sigterm.suspend.timeout:read-resource
+
+echo ===== [verify] 1 インバウンド HTTPS (①): remove モードなら https-listener と applicationKS は "failed" (= 無い) が正しい
+/subsystem=undertow/server=default-server:read-children-names(child-type=https-listener)
+/subsystem=elytron:read-children-names(child-type=key-store)
+
+echo ===== [verify] 1 既定 SSLContext (①: TRUST_MODE=elytron なら extraslb-client-ssl-context / system なら undefined)
+/subsystem=elytron:read-attribute(name=default-ssl-context)
+
+echo ===== [verify] 2 logging (④)
+/subsystem=logging/logger=org.jboss.as.ee:read-resource
+
+echo ===== [verify] 3 datasource (⑧⑩⑪⑫)
+/subsystem=datasources/xa-data-source=MIF02JA_JDS:read-resource(recursive=true)
+
+echo ===== [verify] 4 undertow (⑨)
+/subsystem=undertow/server=default-server/http-listener=default:read-attribute(name=proxy-address-forwarding)
+/subsystem=undertow/server=default-server/host=default-host/setting=console-access-log:read-resource
+
+echo ===== [verify] 5 transactions / jca
+/subsystem=transactions:read-attribute(name=node-identifier)
+/subsystem=jca/cached-connection-manager=cached-connection-manager:read-resource

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  iwinmichl.war 用 jboss-deployment-structure.xml (修正後)
+
+  ② WFLYSRV0058 … <resources><resource-root path="WEB-INF/classes/testClasses"/> を削除。
+                  WEB-INF/classes は最初から WAR の resource-root なので、その配下を追加する必要はない。
+                  テスト用クラスは本番 WAR に入れない (Maven の src/test は WAR に入らない)。
+  ③ WFLYSRV0018 … <module name="org.apache.cxf.impl"/> を削除。
+                  JAX-WS クライアントは webservices サブシステムが暗黙依存を付けるため記述不要。
+                  タイムアウトは標準プロパティ (jakarta.xml.ws.client.*Timeout) で設定する。
+                  CXF 固有 API が本当に必要な場合だけ、public な次のモジュールを使う:
+                    <module name="org.jboss.ws.cxf.jbossws-cxf-client" services="import"/>
+  ⑤ WFLYWELD0013 … このアプリは CDI を使わないため weld を除外 (jsf と一緒に)。
+                  根本原因の EE API jar (jakarta.transaction-api など) の同梱は pom.xml 側で provided にする。
+  ⑥ WFLYSRV0274 … <exclusions><module name="org.jboss.logmanager.log4j2"/> を削除。
+                  このモジュールはデプロイの依存に直接入らないので、除外しても何も起きない (空振り)。
+                  ・EAP のログ (logging サブシステム) に出す … 除外は不要 (推奨。log4j-core を同梱しない)
+                  ・アプリ同梱の Log4j 2 実装で出す … 除外すべきは org.apache.logging.log4j.api
+                    (下のコメントアウトを有効化。もしくは CLI で add-logging-api-dependencies=false)
+-->
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.3">
+    <deployment>
+        <exclude-subsystems>
+            <!-- spring-web の PhaseListener 実装で JSF が有効化されるのを防ぐ (JSF 不使用) -->
+            <subsystem name="jsf"/>
+            <!-- CDI 不使用。⑤ の警告と Weld の起動コストを無くす -->
+            <subsystem name="weld"/>
+        </exclude-subsystems>
+        <!--
+        <exclusions>
+            <module name="org.apache.logging.log4j.api"/>
+        </exclusions>
+        -->
+    </deployment>
+</jboss-deployment-structure>

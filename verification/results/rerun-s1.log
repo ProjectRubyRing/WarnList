@@ -1,0 +1,238 @@
+=== S1 rerun
+### label=s1-after-system image=wl-after-system-remove:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE
+### boot line
+05:48:16,545 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5147ms - Started 597 of 804 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1183 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 232 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 170 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  0
+  ③+   of which org.apache.cxf.impl                   0
+  ③+   of which org.jboss.vfs (spring-core)           0
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0211/0272 suspending server               1
+  ⑬+ WFLYSRV0220 shutdown requested via OS signal     1
+  ⑬+ IJ030022 lock owned during cleanup               0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 0
+=== S1e rerun
+### label=s1e-after-elytron image=wl-after-elytron-remove:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE
+### boot line
+05:51:40,469 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5824ms - Started 601 of 808 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = org.wildfly.security.ssl.DelegatingSSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = /opt/app/security/extraslb-truststore.p12
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1160 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 231 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 5 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  0
+  ③+   of which org.apache.cxf.impl                   0
+  ③+   of which org.jboss.vfs (spring-core)           0
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0211/0272 suspending server               1
+  ⑬+ WFLYSRV0220 shutdown requested via OS signal     1
+  ⑬+ IJ030022 lock owned during cleanup               0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 0
+=== S1d rerun
+### label=s1d-after-dedicated image=wl-after-system-dedicated:1 war=iwinmichl-fixed.war args=-e EAP_SIGTERM_SUSPEND_TIMEOUT=30 -e DB_IDLE_TIMEOUT_MIN=1 -e DB_TRACK_STATEMENTS=TRUE -e INBOUND_KEYSTORE_PASSWORD=inboundpass -v C:/Users/taka_/AppData/Local/Temp/claude/C--Users-taka--Claude-WarnList/f23f9fb0-6d62-400f-90fe-c42220846f6f/scratchpad/work/pki/inbound:/opt/app/runtime-security:ro
+### boot line
+05:52:17,775 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly 35.0.1.Final (WildFly Core 27.0.1.Final) started in 5172ms - Started 602 of 809 services (334 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml - Minimum feature stability level: community
+### GET /iwinmichl/jstl.jsp (⑦)
+JSTL-OK (old URI http://java.sun.com/jsp/jstl/core)
+  (HTTP 200)
+### GET /iwinmichl/jstl-fmt.jsp (⑦)
+1,234.5
+  (HTTP 200)
+### GET /iwinmichl/jstl-new.jsp (⑦)
+JSTL-OK (new URN jakarta.tags.core)
+  (HTTP 200)
+### POST /iwinmichl/api/hello (⑨)
+HTTP/1.1 405 Method Not Allowed
+Allow: GET
+### GET /iwinmichl/api/async (④: Spring の非同期処理)
+async-ok on MvcAsync1  (HTTP 200)
+### GET /iwinmichl/tls?url=https://extraslb-test/ (①: 自己署名ルート CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=ExtraSLB Test Root CA,O=ExtraSLB Test
+### GET /iwinmichl/tls?url=https://www.google.com/ (①: パブリック CA)
+SSLContext.getDefault() = javax.net.ssl.SSLContext (provider=SunJSSE)
+javax.net.ssl.trustStore = null
+A HttpsURLConnection(default)         -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+B java.net.http.HttpClient(default)   -> OK  HTTP 200
+C new SSLContext(TLS).init(null,...)  -> OK  HTTP 200 issuer=CN=WR2,O=Google Trust Services,C=US
+### GET /iwinmichl/soap?sleepMs=3000&timeoutMs=1000 (③: 標準プロパティでタイムアウト)
+TIMEOUT/ERROR after 1156 ms: java.net.SocketTimeoutException: Read timed out
+### GET /iwinmichl/soap?sleepMs=200&timeoutMs=3000 (③: 正常応答)
+OK in 232 ms: slept 200 (client=org.apache.cxf.jaxws.DispatchImpl)
+### GET /iwinmichl/db/ok
+ok 1
+  (HTTP 200)
+### GET /iwinmichl/db/fixed (⑧⑫)
+fixed 1
+  (HTTP 200)
+### 5 秒放置 (MySQL wait_timeout=150 を超える) → 再利用 (⑩⑪)
+### GET /iwinmichl/db/ok (放置後)
+ok 1
+  (HTTP 200)
+### ⑬: /db/slow?sec=15 の実行中 (3 秒後) に docker stop -t 90 (SIGTERM)
+docker stop 所要: 13 秒 / コンテナ終了コード: 0
+slow の応答: slept 15  (HTTP 200)
+
+No     Message                                      Count
+------ -------------------------------------------- -----
+①    WFLYELY00023 keystore file does not exist        0
+  ①+ WFLYELY01084 self-signed will be generated       0
+  ①+ WFLYELY00022 does not exist and required         0
+  ①+ WFLYELY00024 certificate in keystore not valid     0
+②    WFLYSRV0058 resource root does not exist         0
+③    WFLYSRV0018 private module used                  0
+  ③+   of which org.apache.cxf.impl                   0
+  ③+   of which org.jboss.vfs (spring-core)           0
+④    WFLYEE0007 optional component not installed      0
+  ④+   of which org.springframework.*                 0
+  ④+   of which javax.servlet.jsp.jstl.* (=⑦)       0
+⑤    WFLYWELD0013 CDI annotations, no bean archive     0
+⑥    WFLYSRV0274 excluded dependency does not exist     0
+  ⑥+ WFLYSRV0273 excluded subsystem does not exist     0
+⑦    Failed to define class javax.*                   0
+⑧    IJ030040 statement left open                     0
+⑨    Resolved [...HttpRequestMethodNotSupported...]     0
+  ⑨+ HTTP 405 detail line (MethodNotAllowedAdvice)     1
+⑩    IJ030027 destroying connection not valid         0
+⑪    IJ000621 destroying conn. not validated          0
+⑫    IJ030042 result set left open                    0
+⑬    IJ000615 destroying active connection            0
+  ⑬+ IJ000100 CCM closed a leaked connection          0
+  ⑬+ WFLYSRV0211/0272 suspending server               1
+  ⑬+ WFLYSRV0220 shutdown requested via OS signal     1
+  ⑬+ IJ030022 lock owned during cleanup               0
+  他  WFLYTX0013 node-identifier is default            0
+
+total (①〜⑬ 本体) = 0
+=== RERUN DONE
